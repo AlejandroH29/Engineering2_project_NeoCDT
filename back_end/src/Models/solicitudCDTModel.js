@@ -12,11 +12,11 @@ const solicitudCDT = sequelize.define("solicitudCDT",{
         allowNull: false
     },
     fechaInicio:{
-        type: DataTypes.DATE,
+        type: DataTypes.DATEONLY,
         allowNull: false
     },
     fechaFin:{
-        type: DataTypes.DATE,
+        type: DataTypes.DATEONLY,
         allowNull: true
     },
     numeroIdentificacionCliente:{
@@ -25,7 +25,7 @@ const solicitudCDT = sequelize.define("solicitudCDT",{
     },
     numeroIdentificacionAgente:{
         type: DataTypes.STRING,
-        allowNull: false
+        allowNull: true
     },
 })
 
