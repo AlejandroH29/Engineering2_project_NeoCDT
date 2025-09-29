@@ -1,5 +1,6 @@
 import {useState} from 'react'
 import {useNavigate} from "react-router-dom"
+import "../styles/form.css"
 
 export const Register = () => { //AGREGAR BOTÓN GOOGLE
 
@@ -19,28 +20,34 @@ export const Register = () => { //AGREGAR BOTÓN GOOGLE
 
     return (
         <div>
-            <h1>Register</h1>
+            <h1>NeoCDT</h1>
+            <h2>Register</h2>
             <form className="form" onSubmit={handleSubmit}>
                 <label htmlFor="typeId">Tipo de documento</label>
-                <input
+                <select
                 type="select"
                 placeholder='Ingresa tu correo nombre de usuario'
                 name='typeId'
                 value={formData.typeId}
                 onChange={handleChange}
-                />
-                <option value="T.I">T.I</option>
-                <option value="C.C">C.C</option>
-                <option value="ForeignPassport">Pasaporte Extrangero</option>
-
+                >
+                    <option value="none"></option>
+                    <option value="T.I">T.I</option>
+                    <option value="C.C">C.C</option>
+                    <option value="ForeignPassport">Pasaporte Extrangero</option>
+                </select>
                 <label htmlFor="numberId">Numero de documento</label>
                 <input
                 type="number"
-                placeholder='Ingresa tu contraseña'
+                placeholder='Ingresa tu número de cocumento'
                 name='numberId'
                 value={formData.numberId}
                 onChange={handleChange}
                 />
+                <p className="link">
+                    ¿Ya tienes una cuenta?{" "}
+                    <a onClick={() => navigate("/")}>Login</a>
+                </p>
             </form>
         </div>
     )

@@ -1,0 +1,52 @@
+.form{
+    display: flex;
+    flex-direction: column;
+    width: 300px;
+    margin: auto;
+}
+
+h1, h2{
+    text-align: center;
+}
+
+.form label{
+    margin-top: 10px;
+    text-align: left;
+}
+
+.form input{
+    padding: 8px;
+    margin-top: 5px;
+    border: none;
+    border-bottom: 1px solid #ccc;
+    background-color: transparent;
+}
+
+.form input:focus{
+    outline: none;
+    border-bottom: 1px solid #fff;
+}
+
+.form select{
+    padding: 8px;
+    margin-top: 5px;
+    border: none;
+    border-bottom: 1px solid #ccc;
+    background-color: transparent;
+}
+
+.form option{
+    background-color: #242424;
+    color: #fff;
+}
+
+.link a{
+    font-weight: bold;
+    cursor: pointer;
+    color: rgba(94, 180, 241, 0.781);
+    text-decoration: underline;
+}
+
+.link a:hover{
+    color:rgba(134, 199, 245, 0.781);
+}

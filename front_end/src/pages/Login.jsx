@@ -20,7 +20,8 @@ export const Login = () => { //AGREGAR BOTÓN GOOGLE
 
     return (
         <div>
-            <h1>Login</h1>
+            <h1>NeoCDT</h1>
+            <h2>Login</h2>
             <form className="form" onSubmit={handleSubmit}>
                 <label htmlFor="email">Correo</label>
                 <input
@@ -29,7 +30,6 @@ export const Login = () => { //AGREGAR BOTÓN GOOGLE
                 name='email'
                 onChange={handleChange}
                 />
-                <p><small>Nota: Este campo es exclusivo de los agentes, si eres usuario cliente ignoralo</small></p>
                 <label htmlFor="password">Contraseña</label>
                 <input
                 type="password"
@@ -37,6 +37,7 @@ export const Login = () => { //AGREGAR BOTÓN GOOGLE
                 name='password'
                 onChange={handleChange}
                 />
+                <p><small>Nota: Estos campos son exclusivos de los agentes, si usuario cliente ignoralo</small></p>
                 <p className="link">
                     ¿No tienes una cuenta?{" "}
                     <a onClick={() => navigate("/register")}>Register</a>
