@@ -27,9 +27,10 @@ const CDT = sequelize.define("CDT",{
         type: DataTypes.DATEONLY,
         allowNull: true
     },
-    numeroSolicitudCDT:{
+    numSolicitudCDT:{
         type: DataTypes.INTEGER,
-        allowNull: false
+        allowNull: false,
+        unique: true
     },
 })
 

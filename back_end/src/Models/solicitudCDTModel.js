@@ -19,11 +19,11 @@ const solicitudCDT = sequelize.define("solicitudCDT",{
         type: DataTypes.DATEONLY,
         allowNull: true
     },
-    numeroIdentificacionCliente:{
+    numCliente:{
         type: DataTypes.STRING,
         allowNull: false
     },
-    numeroIdentificacionAgente:{
+    numAgente:{
         type: DataTypes.STRING,
         allowNull: true
     },
