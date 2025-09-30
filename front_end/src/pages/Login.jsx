@@ -19,7 +19,7 @@ export const Login = () => { //AGREGAR BOTÓN GOOGLE
     }
 
     return (
-        <div>
+        <div className='form-box'>
             <h1>NeoCDT</h1>
             <h2>Login</h2>
             <form className="form" onSubmit={handleSubmit}>

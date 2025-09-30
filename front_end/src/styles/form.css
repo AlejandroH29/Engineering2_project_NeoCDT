@@ -1,8 +1,17 @@
+.form-box{
+    margin: calc(100vh / 8);
+    display: flex;
+    flex-direction: column;
+    padding: 8px 15px;
+    border-radius: 15px;
+    border: solid #fff;
+    align-items: center;
+}
+
 .form{
     display: flex;
     flex-direction: column;
-    width: 300px;
-    margin: auto;
+    width: 350px;
 }
 
 h1, h2{
