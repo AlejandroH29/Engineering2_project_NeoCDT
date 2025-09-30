@@ -1,6 +1,7 @@
 import {useState} from 'react'
 import {useNavigate} from "react-router-dom"
-import { FormButton } from '../components/formButton';
+import { FormButton } from '../components/FormButton';
+import "../styles/form.css"
 
 export const Login = () => { //AGREGAR BOTÓN GOOGLE
 
@@ -14,14 +15,14 @@ export const Login = () => { //AGREGAR BOTÓN GOOGLE
     }
 
     const handleSubmit = (e) => {
-        e.prevendDrfault();
+        e.preventDefault();
         navigate("/dashboard");
     }
 
     return (
-        <div>
-            <h1>NeoCDT</h1>
-            <h2>Login</h2>
+        <div className="form-container">
+            <h1 className="app-title">NeoCDT</h1>
+            <h2 className="page-subtitle">Login</h2>
             <form className="form" onSubmit={handleSubmit}>
                 <label htmlFor="email">Correo</label>
                 <input

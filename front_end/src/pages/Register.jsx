@@ -19,9 +19,9 @@ export const Register = () => { //AGREGAR BOTÓN GOOGLE
     }
 
     return (
-        <div>
-            <h1>NeoCDT</h1>
-            <h2>Register</h2>
+        <div className="form-container">
+            <h1 className="app-title">NeoCDT</h1>
+            <h2 className="page-subtitle">Register</h2>
             <form className="form" onSubmit={handleSubmit}>
                 <label htmlFor="typeId">Tipo de documento</label>
                 <select
