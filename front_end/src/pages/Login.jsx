@@ -1,9 +1,11 @@
-import {useState} from 'react'
+import {useContext, useState} from 'react'
 import {useNavigate} from "react-router-dom"
 import { FormButton } from '../components/FormButton';
+import { AuthContext } from '../context/AuthContext';
 import "../styles/form.css"
 
 export const Login = () => { //AGREGAR BOTÓN GOOGLE
+    const {login} = useContext(AuthContext);
 
     const navigate = useNavigate();
 
@@ -16,7 +18,11 @@ export const Login = () => { //AGREGAR BOTÓN GOOGLE
 
     const handleSubmit = (e) => {
         e.preventDefault();
-        navigate("/dashboard");
+        login(formData);
+    }
+
+    const googleLogin = () => {
+        //Logica para iniciar sesión con Google
     }
 
     return (
@@ -38,7 +44,7 @@ export const Login = () => { //AGREGAR BOTÓN GOOGLE
                 name='password'
                 onChange={handleChange}
                 />
-                <p><small>Nota: Estos campos son exclusivos de los agentes, si usuario cliente ignoralo</small></p>
+                <p><small>Nota: Estos campos son exclusivos de los agentes, si usuario cliente usa el botón de google</small></p>
                 <p className="link">
                     ¿No tienes una cuenta?{" "}
                     <a onClick={() => navigate("/register")}>Register</a>

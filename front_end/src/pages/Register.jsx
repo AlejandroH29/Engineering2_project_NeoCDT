@@ -48,6 +48,7 @@ export const Register = () => { //AGREGAR BOTÓN GOOGLE
                     ¿Ya tienes una cuenta?{" "}
                     <a onClick={() => navigate("/")}>Login</a>
                 </p>
+                <p onClick={() => navigate("/create-agent")} >CREAR AGENTE</p>
             </form>
         </div>
     )
