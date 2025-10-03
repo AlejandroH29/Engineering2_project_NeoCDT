@@ -1,12 +1,13 @@
 import {useState} from 'react'
 import {useNavigate} from "react-router-dom"
 import "../styles/form.css"
+import { FormButton } from '../components/FormButton';
 
-export const Register = () => { //AGREGAR BOTÓN GOOGLE
+export const Register = () => {
 
     const navigate = useNavigate();
 
-    const [formData, setFormData] = useState({typeId: "", numberId: ""})
+    const [formData, setFormData] = useState({numberId: 0, email: "", password: ""})
 
     const handleChange = (e) => {
         const {name, value} = e.target;
@@ -23,19 +24,6 @@ export const Register = () => { //AGREGAR BOTÓN GOOGLE
             <h1 className="app-title">NeoCDT</h1>
             <h2 className="page-subtitle">Register</h2>
             <form className="form" onSubmit={handleSubmit}>
-                <label htmlFor="typeId">Tipo de documento</label>
-                <select
-                type="select"
-                placeholder='Ingresa tu correo nombre de usuario'
-                name='typeId'
-                value={formData.typeId}
-                onChange={handleChange}
-                >
-                    <option value="none"></option>
-                    <option value="T.I">T.I</option>
-                    <option value="C.C">C.C</option>
-                    <option value="ForeignPassport">Pasaporte Extrangero</option>
-                </select>
                 <label htmlFor="numberId">Numero de documento</label>
                 <input
                 type="number"
@@ -43,6 +31,29 @@ export const Register = () => { //AGREGAR BOTÓN GOOGLE
                 name='numberId'
                 value={formData.numberId}
                 onChange={handleChange}
+                required
+                />
+                <label htmlFor="email">Correo electrónico</label>
+                <input
+                type="email"
+                placeholder='Ingresa tu correo electrónico'
+                name='email'
+                value={formData.email}
+                onChange={handleChange}
+                required
+                />
+                <label htmlFor="password">Contraseña</label>
+                <input
+                type="password"
+                placeholder='Ingresa tu contraseña'
+                name='password'
+                value={formData.password}
+                onChange={handleChange}
+                required
+                />
+                <FormButton
+                text={"Registrarse"}
+                onClick={handleSubmit}
                 />
                 <p className="link">
                     ¿Ya tienes una cuenta?{" "}

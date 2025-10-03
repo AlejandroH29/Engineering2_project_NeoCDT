@@ -86,6 +86,10 @@ body {
     background-color: #ffffff;
 }
 
+.form input::placeholder{
+    font-family: system-ui, Avenir, Helvetica, Arial, sans-serif;
+}
+
 .form select {
     padding: 12px;
     margin-top: 5px;

@@ -1,5 +1,5 @@
 import { Login } from "../pages/Login"
-import { Register } from "../pages/register"
+import { Register } from "../pages/Register"
 import { CreateAgent } from "../pages/CreateAgent"
 import {Route, Routes} from "react-router-dom"
 import { PrivateRoute } from "../components/PrivateRoute"
@@ -11,9 +11,9 @@ export const AppRoutes = () => {
                 <Route path="/" element={<Login/>} />
                 <Route path="/register" element={<Register/>} />
                 <Route path="/create-agent" element={
-                    <PrivateRoute>
+                    // <PrivateRoute>
+                    // </PrivateRoute>
                         <CreateAgent/>
-                    </PrivateRoute>
                 } />
             </Routes>
         </>
