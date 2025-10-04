@@ -1,28 +1,20 @@
-import {Agente} from "./AgenteModel.js"
-import {CDT} from "./CDTModel.js"
-import {Cliente} from "./ClienteModel.js"
-import {solicitudCDT} from "./solicitudCDTModel.js"
+import { Usuario } from "./UsuarioModel.js"
+import { Cambios } from "./CambiosModel.js";
+import { solicitudCDT } from "./solicitudCDTModel.js";
 
-Cliente.hasMany(solicitudCDT,{
-    foreignKey: "numCliente"
+Usuario.hasMany(solicitudCDT,{
+    foreignKey: "numUsuario"
 });
-solicitudCDT.belongsTo(Cliente,{
-    foreignKey: "numCliente",
+solicitudCDT.belongsTo(Usuario,{
+    foreignKey: "numUsuario",
     targetKey: "numeroIdentificacion"
 })
 
-Agente.hasMany(solicitudCDT,{
-    foreignKey: "numAgente"
-});
-solicitudCDT.belongsTo(Agente,{
-    foreignKey: "numAgente",
-    targetKey: "numeroIdentificacion"
-})
-
-solicitudCDT.hasOne(CDT,{
+solicitudCDT.hasMany(Cambios, {
     foreignKey: "numSolicitudCDT"
-});
-CDT.belongsTo(solicitudCDT, {
+})
+
+Cambios.belongsTo(solicitudCDT, {
     foreignKey: "numSolicitudCDT",
     targetKey: "numero"
 })

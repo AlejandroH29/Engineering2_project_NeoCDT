@@ -7,26 +7,30 @@ const solicitudCDT = sequelize.define("solicitudCDT",{
         primaryKey: true,
         allowNull: false
     },
+    numUsuario:{
+        type: DataTypes.STRING,
+        allowNull: false
+    },
     estado:{
         type: DataTypes.ENUM("Borrador", "enValidacion", "Aprobada", "Rechazada", "Cancelada"),
         allowNull: false
     },
-    fechaInicio:{
-        type: DataTypes.DATEONLY,
+    tiempo:{
+        type: DataTypes.ENUM("3","6","9","12"),
         allowNull: false
     },
-    fechaFin:{
-        type: DataTypes.DATEONLY,
-        allowNull: true
+    tasaInteres:{
+        type: DataTypes.DOUBLE,
+        allowNull:false
     },
-    numCliente:{
-        type: DataTypes.STRING,
+    montoInicial:{
+        type: DataTypes.INTEGER,
+        allowNull:false
+    },
+    montoGanancia:{
+        type: DataTypes.INTEGER,
         allowNull: false
-    },
-    numAgente:{
-        type: DataTypes.STRING,
-        allowNull: true
-    },
+    }
 })
 
 export {solicitudCDT}

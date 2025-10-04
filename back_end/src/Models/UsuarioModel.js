@@ -1,7 +1,7 @@
-import { sequelize } from "../Config/configDatabase";
+import { sequelize } from "../Config/configDatabase.js";
 import {DataTypes} from "sequelize";
 
-const Agente = sequelize.define("Agente", {
+const Usuario = sequelize.define("Usuario", {
     numeroIdentificacion:{
         type: DataTypes.STRING,
         primaryKey: true,
@@ -23,10 +23,14 @@ const Agente = sequelize.define("Agente", {
         type: DataTypes.STRING,
         allowNull: false
     },
-    contrasena:{
+    contraseña:{
         type: DataTypes.STRING,
+        allowNull: false
+    },
+    tipo:{
+        type: DataTypes.ENUM("Cliente", "Agente", "Administrador"),
         allowNull: false
     }
 })
 
-export {Agente}
+export {Usuario}

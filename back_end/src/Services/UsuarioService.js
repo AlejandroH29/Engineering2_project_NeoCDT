@@ -1,16 +1,14 @@
-import { Cliente } from "../Models/ClienteModel";
+import { Usuario } from "../Models/UsuarioModel.js";
 
-const crearCliente = async (cliente) =>{
-    try{
-        const clientePorUserName = await Cliente.findOne({
-            where: { nombreUsuario: cliente.nombreUsuario}
-        })
-        if(clientePorUserName != null){
-            throw new Error("El nombre de usuario ya existe");
-        }
-        const nuevoCliente = await Cliente.create(cliente);
-        return nuevoCliente;
-    }catch(e){
-        return "Error al crear el usuario, verifique sus datos"
+const crearUsuario = async (usuario) =>{
+    const usuarioPorUserName = await Usuario.findOne({
+        where: { nombreUsuario: usuario.nombreUsuario}
+    })
+    if(usuarioPorUserName != null){
+        throw new Error("El nombre de usuario ya existe");
     }
+    const nuevoUsuario = await Usuario.create(usuario);
+    return nuevoUsuario;
 }
+
+export {crearUsuario};
