@@ -7,6 +7,12 @@ const crearUsuario = async (usuario) =>{
     if(usuarioPorUserName != null){
         throw new Error("El nombre de usuario ya existe");
     }
+    const usuarioPorEmail = await Usuario.findOne({
+        where: { correo: usuario.correo}
+    })
+    if(usuarioPorEmail != null){
+        throw new Error("El correo de usuario ya esta en uso");
+    }
     const nuevoUsuario = await Usuario.create(usuario);
     return nuevoUsuario;
 }
