@@ -21,7 +21,8 @@ const Cambios  = sequelize.define("Cambios",{
     }
 },{ 
     tableName: "Cambios",     
-    freezeTableName: true     
+    freezeTableName: true,
+    timestamps: false 
 })
 
 export {Cambios};

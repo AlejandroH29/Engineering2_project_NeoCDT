@@ -33,7 +33,8 @@ const solicitudCDT = sequelize.define("solicitudCDT",{
     }
 },{ 
     tableName: "SolicitudCDT",     
-    freezeTableName: true     
+    freezeTableName: true,
+    timestamps: false   
 })
 
 export {solicitudCDT}
