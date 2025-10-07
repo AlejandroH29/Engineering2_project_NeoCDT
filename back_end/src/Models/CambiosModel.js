@@ -19,6 +19,10 @@ const Cambios  = sequelize.define("Cambios",{
         type: DataTypes.INTEGER,
         allowNull: false
     }
+},{ 
+    tableName: "Cambios",     
+    freezeTableName: true,
+    timestamps: false 
 })
 
 export {Cambios};

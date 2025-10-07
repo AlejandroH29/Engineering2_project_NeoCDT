@@ -23,7 +23,7 @@ const Usuario = sequelize.define("Usuario", {
         type: DataTypes.STRING,
         allowNull: false
     },
-    contraseña:{
+    contrasena:{
         type: DataTypes.STRING,
         allowNull: false
     },
@@ -31,6 +31,11 @@ const Usuario = sequelize.define("Usuario", {
         type: DataTypes.ENUM("Cliente", "Agente", "Administrador"),
         allowNull: false
     }
-})
+},{ 
+    tableName: "Usuario",     
+    freezeTableName: true,
+    timestamps: false    
+}
+)
 
 export {Usuario}
