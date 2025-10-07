@@ -31,6 +31,9 @@ const solicitudCDT = sequelize.define("solicitudCDT",{
         type: DataTypes.INTEGER,
         allowNull: false
     }
+},{ 
+    tableName: "SolicitudCDT",     
+    freezeTableName: true     
 })
 
 export {solicitudCDT}

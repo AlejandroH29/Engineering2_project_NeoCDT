@@ -31,6 +31,10 @@ const Usuario = sequelize.define("Usuario", {
         type: DataTypes.ENUM("Cliente", "Agente", "Administrador"),
         allowNull: false
     }
-})
+},{ 
+    tableName: "Usuario",     
+    freezeTableName: true     
+}
+)
 
 export {Usuario}
