@@ -7,7 +7,7 @@ export const Register = () => {
 
     const navigate = useNavigate();
 
-    const [formData, setFormData] = useState({numberId: 0, email: "", password: ""})
+    const [formData, setFormData] = useState({numberId: 0, nombre: "", tipoIdentificacion: "", email: "", password: "", tipo:"Cliente"})
 
     const handleChange = (e) => {
         const {name, value} = e.target;
@@ -33,6 +33,20 @@ export const Register = () => {
                 onChange={handleChange}
                 required
                 />
+                <label htmlFor='nombreCompleto'>Nombre completo</label>
+                <input
+                type='text'
+                placeholder='Ingresa tu nombre completo'
+                name='nombre'
+                value={formData.nombre}
+                onChange={handleChange}
+                />
+                <label htmlFor="tipoIdentificacion">Tipo de identificacion</label>
+                <select name="tipoIdentificacion" value={formData.tipoIdentificacion} onChange={handleChange}>
+                    <option value="CC">CC</option>
+                    <option value="CE">CE</option>
+                    <option value="Pasaporte">Pasaporte</option>
+                </select>
                 <label htmlFor="email">Correo electrónico</label>
                 <input
                 type="email"
@@ -63,4 +77,4 @@ export const Register = () => {
             </form>
         </div>
     )
-}   
+}

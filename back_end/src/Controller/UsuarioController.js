@@ -7,6 +7,7 @@ const crearUsuarioController = async (req, res, next)=>{
         res.status(201).json(usuarioCreado);
     }catch(err){
         next(err);
+        console.log(err);
     }
 }
 

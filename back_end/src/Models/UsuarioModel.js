@@ -15,10 +15,6 @@ const Usuario = sequelize.define("Usuario", {
         type: DataTypes.ENUM("CC", "CE", "Pasaporte"),
         allowNull: false
     },
-    nombreUsuario:{
-        type: DataTypes.STRING,
-        allowNull: false
-    },
     correo:{
         type: DataTypes.STRING,
         allowNull: false
