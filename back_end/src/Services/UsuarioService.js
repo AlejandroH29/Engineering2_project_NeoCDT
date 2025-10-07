@@ -18,7 +18,7 @@ const validarInicioSesion = async (correo, contraseña) =>{
     if(usuarioPorCorreo == null){
         throw new Error("El usuario no se encontro o no existe");
     }else{
-        if(usuarioPorCorreo.contraseña !== contraseña){
+        if(usuarioPorCorreo.contrasena !== contraseña){
             throw new Error("Contraseña incorrecta");
         }
     }

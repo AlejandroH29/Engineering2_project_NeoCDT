@@ -1,5 +1,5 @@
 import { crearUsuario } from "../Services/UsuarioService.js"
-
+import { validarInicioSesion } from "../Services/UsuarioService.js";
 
 const crearUsuarioController = async (req, res, next)=>{
     try{
@@ -11,4 +11,13 @@ const crearUsuarioController = async (req, res, next)=>{
     }
 }
 
-export {crearUsuarioController};
+const validarInicioSesionController = async (req, res, next) =>{
+    try{
+        const validacion = await validarInicioSesion(req.body.correo, req.body.contrasena);
+        res.status(201).json(validacion);
+    }catch(err){
+        next(err);
+        console.log(err)
+    }
+}
+export {crearUsuarioController, validarInicioSesionController};
