@@ -2,21 +2,28 @@ import {useState} from 'react'
 import {useNavigate} from "react-router-dom"
 import "../styles/form.css"
 import { FormButton } from '../components/FormButton';
+import axios from 'axios';
 
 export const Register = () => {
 
     const navigate = useNavigate();
 
-    const [formData, setFormData] = useState({numberId: 0, nombre: "", tipoIdentificacion: "", email: "", password: "", tipo:"Cliente"})
+    const [formData, setFormData] = useState({numeroIdentificacion: 0, nombreCompleto: "", tipoIdentificacion: "CC", correo: "", contrasena: "", tipo:"Cliente"})
 
     const handleChange = (e) => {
         const {name, value} = e.target;
         setFormData({...formData,  [name]: value});
     }
     
-    const handleSubmit = (e) => {
+    const handleSubmit = async (e) => {
         e.preventDefault();
-        navigate("/");
+        try {
+            await axios.post("http://localhost:3000/usuarios/crearUsuario", formData)
+            alert("Usuario creado con exito")
+            navigate("/")
+        } catch (err) {
+            alert(err?.response?.data?.error || "Error al registrar")
+        }
     }
 
     return (
@@ -24,12 +31,12 @@ export const Register = () => {
             <h1 className="app-title">NeoCDT</h1>
             <h2 className="page-subtitle">Register</h2>
             <form className="form" onSubmit={handleSubmit}>
-                <label htmlFor="numberId">Numero de documento</label>
+                <label htmlFor="numeroIdentificacion">Numero de documento</label>
                 <input
                 type="number"
                 placeholder='Ingresa tu número de cocumento'
-                name='numberId'
-                value={formData.numberId}
+                name='numeroIdentificacion'
+                value={formData.numeroIdentificacion}
                 onChange={handleChange}
                 required
                 />
@@ -37,8 +44,8 @@ export const Register = () => {
                 <input
                 type='text'
                 placeholder='Ingresa tu nombre completo'
-                name='nombre'
-                value={formData.nombre}
+                name='nombreCompleto'
+                value={formData.nombreCompleto}
                 onChange={handleChange}
                 />
                 <label htmlFor="tipoIdentificacion">Tipo de identificacion</label>
@@ -47,21 +54,21 @@ export const Register = () => {
                     <option value="CE">CE</option>
                     <option value="Pasaporte">Pasaporte</option>
                 </select>
-                <label htmlFor="email">Correo electrónico</label>
+                <label htmlFor="correo">Correo electrónico</label>
                 <input
                 type="email"
                 placeholder='Ingresa tu correo electrónico'
-                name='email'
-                value={formData.email}
+                name='correo'
+                value={formData.correo}
                 onChange={handleChange}
                 required
                 />
-                <label htmlFor="password">Contraseña</label>
+                <label htmlFor="contrasena">Contraseña</label>
                 <input
                 type="password"
                 placeholder='Ingresa tu contraseña'
-                name='password'
-                value={formData.password}
+                name='contrasena'
+                value={formData.contrasena}
                 onChange={handleChange}
                 required
                 />
