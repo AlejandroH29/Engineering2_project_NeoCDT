@@ -1,4 +1,4 @@
-import { crearSolicitudCDT } from "../Services/solicitudCDTService";
+import { crearSolicitudCDT } from "../Services/solicitudCDTService.js";
 
 const crearSolicitudCDTController = async (req, res, next)=>{
     try{

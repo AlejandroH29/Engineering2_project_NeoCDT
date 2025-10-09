@@ -1,4 +1,4 @@
-import { actualizarSolicitudCDTController, crearSolicitudCDTController } from "../Controller/SolicitudCDTController";
+import { actualizarSolicitudCDTController, crearSolicitudCDTController } from "../Controller/SolicitudCDTController.js";
 import { Router } from "express";
 
 const router = Router();
