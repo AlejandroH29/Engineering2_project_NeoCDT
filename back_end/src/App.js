@@ -4,6 +4,8 @@ import "./Config/configDatabase.js";
 import "./Models/Asociaciones.js"
 import {errorHandler} from "./Middlewares/ErrorHandler.js"
 import UsuarioRoutes from "./Routes/UsuarioRoutes.js"
+import SolicitudCDTRoutes from "./Routes/SolicitudCDTRoutes.js"
+
 const app = express();
 const port = 3000;
 
@@ -11,6 +13,7 @@ app.use(express.json());
 app.use(cors({ origin: "http://localhost:5173" }));
 
 app.use("/usuarios", UsuarioRoutes);
+app.use("/solicitudCDT", SolicitudCDTRoutes);
 app.use(errorHandler)
 
 app.listen(port, ()=>{

@@ -9,4 +9,13 @@ const crearSolicitudCDTController = async (req, res, next)=>{
     }
 }
 
-export {crearSolicitudCDTController}
+const actualizarSolicitudCDTController = async (req, res, next)=>{
+    try{
+        const solicitudCDTCreado = await actualizarSolicitudCDT(req.body);
+        res.status(201).json(solicitudCDTCreado);
+    }catch(err){
+        next(err);
+    }
+}
+
+export {crearSolicitudCDTController, actualizarSolicitudCDTController}
