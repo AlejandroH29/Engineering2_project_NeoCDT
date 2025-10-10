@@ -13,7 +13,7 @@ app.use(express.json());
 app.use(cors({ origin: "http://localhost:5173" }));
 
 app.use("/usuarios", UsuarioRoutes);
-app.use("/solicitudCDT", SolicitudCDTRoutes);
+app.use("/solicitudes", SolicitudCDTRoutes);
 app.use(errorHandler)
 
 app.listen(port, ()=>{

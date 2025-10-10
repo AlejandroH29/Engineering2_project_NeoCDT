@@ -28,15 +28,16 @@ const crearSolicitudCDT = async (solicitud) =>{
     while (existe) {
         numeroAleatorio = generarNumeroSolicitudAleatorio();
         const solicitudPorNumero = await solicitudCDT.findOne({
-            where: {numeroSolicitud: numeroAleatorio}
+            where: {numero: numeroAleatorio}
         })
         existe = !!solicitudPorNumero;
     }
-    solicitud.numeroSolicitud = numeroAleatorio;
+    solicitud.numero = numeroAleatorio;
 
     solicitud.estado = "Borrador";
 
-    const tasaEfectiva = calcularInteresCDT(solicitud.diasInversion);
+    const tiempo = parseInt(solicitud.tiempo)
+    const tasaEfectiva = calcularInteresCDT(tiempo);
     const montoFinal = calcularGananciaCDT(solicitud.montoInicial, tasaEfectiva);
 
     solicitud.tasaInteres = tasaEfectiva;
