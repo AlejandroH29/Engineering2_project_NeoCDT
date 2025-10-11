@@ -2,6 +2,7 @@ import {useContext, useState} from 'react'
 import {useNavigate} from "react-router-dom"
 import { FormButton } from '../components/FormButton';
 import { AuthContext } from '../context/AuthContext';
+import axios from 'axios';
 import "../styles/form.css"
 
 export const Login = () => {
@@ -9,16 +10,22 @@ export const Login = () => {
 
     const navigate = useNavigate();
 
-    const [formData, setFormData] = useState({email: "", password: ""});
+    const [formData, setFormData] = useState({correo: "", contrasena: ""});
 
     const handleChange = (e) => {
         const {name, value} = e.target;
         setFormData({...formData,  [name]: value});
     }
 
-    const handleSubmit = (e) => {
-        e.preventDefault();
-        login(formData);
+    const handleSubmit = async (e) => {
+        e.preventDefault(); 
+        try {
+            await axios.post("http://localhost:3000/usuarios/validarSesion", formData)
+            alert("Sesion iniciada")
+            navigate("/client")
+        } catch (err) {
+            alert(err?.response?.data?.error || "Error al ingresar")
+        }
     }
 
     return (
@@ -26,18 +33,18 @@ export const Login = () => {
             <h1 className="app-title">NeoCDT</h1>
             <h2 className="page-subtitle">Login</h2>
             <form className="form" onSubmit={handleSubmit}>
-                <label htmlFor="email">Correo</label>
+                <label htmlFor="correo">Correo</label>
                 <input
                 type="email"
                 placeholder='Ingresa tu correo de agente'
-                name='email'
+                name='correo'
                 onChange={handleChange}
                 />
-                <label htmlFor="password">Contraseña</label>
+                <label htmlFor="contrasena">Contraseña</label>
                 <input
                 type="password"
                 placeholder='Ingresa tu contraseña'
-                name='password'
+                name='contrasena'
                 onChange={handleChange}
                 />
                 <p className="link">
