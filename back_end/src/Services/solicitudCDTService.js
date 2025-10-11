@@ -49,19 +49,20 @@ const crearSolicitudCDT = async (solicitud) =>{
 
 const estadosPermitidosPorAgente = ["enValidacion", "Aprobada", "Rechazada"]
 const estadoPermitidoPorCliente = "Cancelada"
-const actualizarSolicitudCDT = async (id, usuarioId, nuevoEstado) =>{
+const actualizarSolicitudCDT = async (solicitud, nuevoEstado) =>{
 
-    const solicitud = await solicitudCDT.findByPk(id);
-    if (!solicitud) {
+    const solicitudBuscada = await solicitudCDT.findOne({
+        where: {numero: solicitud.numero}
+    });
+    if (!solicitudBuscada) {
         throw new Error("Solicitud no encontrada");
     }
     
-    const usuario = await Usuario.findByPk(usuarioId);
-    if (!usuario) {
-        throw new Error("Usuario no encontrado")
-    }
+    const usuario = await Usuario.findOne({
+        where: {numeroIdentificacion: solicitudBuscada.numUsuario}
+    });
 
-    if (usuario.tipo !== "Agente") {
+    if (usuario.tipo == "Agente") {
         if (!estadosPermitidosPorAgente.includes(nuevoEstado)) {
             throw new Error("El estado al que vas a modificar la solicitud no es valido");
         }
@@ -70,17 +71,13 @@ const actualizarSolicitudCDT = async (id, usuarioId, nuevoEstado) =>{
             throw new Error("El estado al que vas a modificar la solicitud no es valido para Cliente");
         }
     } else {
-         throw new Error("Tipo de usuario no autorizado para actuualizar el estado de la solicitud");
+         throw new Error("Tipo de usuario no autorizado para actualizar el estado de la solicitud");
     }
 
-    if (solicitud.estado == nuevoEstado){
-    throw new Error("No puedes modificar una solicitud con el mismo estado")
-  }
+  solicitudBuscada.estado = nuevoEstado;
+    await solicitudBuscada.save();
 
-  solicitud.estado = nuevoEstado;
-    await solicitud.save();
-
-    return solicitud;
+    return solicitudBuscada;
    
   }
 

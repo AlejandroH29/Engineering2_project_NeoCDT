@@ -4,5 +4,5 @@ import { Router } from "express";
 const router = Router();
 
 router.post("/crearSolicitudCDT",crearSolicitudCDTController);
-router.post("/actualizarSolicitudCDT", actualizarSolicitudCDTController)
+router.put("/actualizarSolicitudCDT", actualizarSolicitudCDTController)
 export default router;
