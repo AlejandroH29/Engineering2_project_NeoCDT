@@ -3,7 +3,7 @@ import { Usuario } from "../Models/UsuarioModel.js";
 
 
 function calcularInteresCDT(diasInversion){
-    const tasaEfectiva = (1 + 0.10)**(diasInversion/365)-1;
+    const tasaEfectiva = (1 + 0.10)**(((diasInversion)*30)/365)-1;
     return tasaEfectiva;
 }
 
@@ -74,11 +74,26 @@ const actualizarSolicitudCDT = async (solicitud, nuevoEstado) =>{
          throw new Error("Tipo de usuario no autorizado para actualizar el estado de la solicitud");
     }
 
-  solicitudBuscada.estado = nuevoEstado;
+    solicitudBuscada.estado = nuevoEstado;
     await solicitudBuscada.save();
 
     return solicitudBuscada;
    
   }
 
-export {crearSolicitudCDT, actualizarSolicitudCDT}
+  const eliminarSolicitudCDT = async (solicitud) => {
+
+    const solicitudBuscada = await solicitudCDT.findOne({
+        where: {numero: solicitud.numero}
+    });
+
+    if (!solicitudBuscada){
+        throw new Error ("Solicitud no encontrada");
+    }
+
+    await solicitudBuscada.destroy();
+    return {mensaje: "La solicitud ha sido eliminada con éxito"}
+
+  }
+
+export {crearSolicitudCDT, actualizarSolicitudCDT, eliminarSolicitudCDT}

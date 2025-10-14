@@ -1,4 +1,4 @@
-import { crearSolicitudCDT, actualizarSolicitudCDT } from "../Services/solicitudCDTService.js";
+import { crearSolicitudCDT, actualizarSolicitudCDT, eliminarSolicitudCDT } from "../Services/solicitudCDTService.js";
 
 const crearSolicitudCDTController = async (req, res, next)=>{
     try{
@@ -22,4 +22,14 @@ const actualizarSolicitudCDTController = async (req, res, next) => {
     }
 };
 
-export {crearSolicitudCDTController, actualizarSolicitudCDTController}
+const eliminarSolicitudCDTController = async (req, res, next) => {
+    try{
+        const numero = req.params.numero;
+        const solicitudCDTEliminada = await eliminarSolicitudCDT({numero});
+        res.status(200).json(solicitudCDTEliminada);
+    }catch(err){
+        next(err)
+    }
+};
+
+export {crearSolicitudCDTController, actualizarSolicitudCDTController, eliminarSolicitudCDTController}
