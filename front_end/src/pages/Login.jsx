@@ -6,7 +6,7 @@ import axios from 'axios';
 import "../styles/form.css"
 
 export const Login = () => {
-    const {login} = useContext(AuthContext);
+    const {login, currentUser} = useContext(AuthContext);
 
     const navigate = useNavigate();
 
@@ -20,9 +20,20 @@ export const Login = () => {
     const handleSubmit = async (e) => {
         e.preventDefault(); 
         try {
-            await axios.post("http://localhost:3000/usuarios/validarSesion", formData)
+            await axios.post("http://localhost:3000/usuarios/validarSesion", formData);
             alert("Sesion iniciada")
-            navigate("/client")
+            login(formData);
+            switch (currentUser.tipo) {
+                case "Agente":
+                    navigate("/agent");
+                    break;
+                case "Admin":
+                    navigate("/admin");
+                    break;
+                case "Cliente":
+                    navigate("/client");
+                    break;
+            }
         } catch (err) {
             alert(err?.response?.data?.error || "Error al ingresar")
         }
@@ -55,6 +66,7 @@ export const Login = () => {
                 text = "Iniciar Sesión"
                 />
             </form>
+            <p onClick={() => navigate("/admin")} >VISTA ADMIN</p>
         </div>
     )
 }
