@@ -36,9 +36,21 @@ const crearSolicitudCDT = async (solicitud) =>{
 
     solicitud.estado = "Borrador";
 
+    const usuarioBuscado = await Usuario.findOne({
+        where: {numeroIdentificacion: solicitud.numUsuario}
+    });
+    if(!usuarioBuscado){
+        throw new Error("Usuario no encontrado")
+    }
+
+    if (usuarioBuscado.tipo !== "Cliente") {
+        throw new Error("Solo los usuarios de tipo Cliente pueden crear solicitudes");
+    }
+
     const tiempo = parseInt(solicitud.tiempo)
     const tasaEfectiva = calcularInteresCDT(tiempo);
     const montoFinal = calcularGananciaCDT(solicitud.montoInicial, tasaEfectiva);
+    
 
     solicitud.tasaInteres = tasaEfectiva;
     solicitud.montoGanancia = montoFinal;
@@ -47,9 +59,7 @@ const crearSolicitudCDT = async (solicitud) =>{
     return nuevaSolicitud;
 }
 
-const estadosPermitidosPorAgente = ["enValidacion", "Aprobada", "Rechazada"]
-const estadoPermitidoPorCliente = "Cancelada"
-const actualizarSolicitudCDT = async (solicitud, nuevoEstado) =>{
+const actualizarSolicitudCDT = async (solicitud, nuevoEstado,) =>{
 
     const solicitudBuscada = await solicitudCDT.findOne({
         where: {numero: solicitud.numero}
@@ -58,27 +68,10 @@ const actualizarSolicitudCDT = async (solicitud, nuevoEstado) =>{
         throw new Error("Solicitud no encontrada");
     }
     
-    const usuario = await Usuario.findOne({
-        where: {numeroIdentificacion: solicitudBuscada.numUsuario}
-    });
-
-    if (usuario.tipo == "Agente") {
-        if (!estadosPermitidosPorAgente.includes(nuevoEstado)) {
-            throw new Error("El estado al que vas a modificar la solicitud no es valido");
-        }
-    } else if (usuario.tipo == "Cliente") {
-        if (nuevoEstado !== estadoPermitidoPorCliente) {
-            throw new Error("El estado al que vas a modificar la solicitud no es valido para Cliente");
-        }
-    } else {
-         throw new Error("Tipo de usuario no autorizado para actualizar el estado de la solicitud");
-    }
-
-  solicitudBuscada.estado = nuevoEstado;
+    solicitudBuscada.estado = nuevoEstado;
     await solicitudBuscada.save();
 
     return solicitudBuscada;
-   
-  }
+}
 
 export {crearSolicitudCDT, actualizarSolicitudCDT}
