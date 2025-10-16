@@ -3,7 +3,7 @@ import { Usuario } from "../Models/UsuarioModel.js";
 
 
 function calcularInteresCDT(diasInversion){
-    const tasaEfectiva = (1 + 0.10)**(diasInversion/365)-1;
+    const tasaEfectiva = (1 + 0.10)**(((diasInversion)*30)/365)-1;
     return tasaEfectiva;
 }
 
@@ -68,10 +68,44 @@ const actualizarSolicitudCDT = async (solicitud, nuevoEstado,) =>{
         throw new Error("Solicitud no encontrada");
     }
     
+<<<<<<< HEAD
+=======
+    const usuario = await Usuario.findOne({
+        where: {numeroIdentificacion: solicitudBuscada.numUsuario}
+    });
+
+    if (usuario.tipo == "Agente") {
+        if (!estadosPermitidosPorAgente.includes(nuevoEstado)) {
+            throw new Error("El estado al que vas a modificar la solicitud no es valido");
+        }
+    } else if (usuario.tipo == "Cliente") {
+        if (nuevoEstado !== estadoPermitidoPorCliente) {
+            throw new Error("El estado al que vas a modificar la solicitud no es valido para Cliente");
+        }
+    } else {
+         throw new Error("Tipo de usuario no autorizado para actualizar el estado de la solicitud");
+    }
+
+>>>>>>> fbb1c76dcb672a934e5bc25aadb871650b292855
     solicitudBuscada.estado = nuevoEstado;
     await solicitudBuscada.save();
 
     return solicitudBuscada;
 }
 
-export {crearSolicitudCDT, actualizarSolicitudCDT}
+  const eliminarSolicitudCDT = async (solicitud) => {
+
+    const solicitudBuscada = await solicitudCDT.findOne({
+        where: {numero: solicitud.numero}
+    });
+
+    if (!solicitudBuscada){
+        throw new Error ("Solicitud no encontrada");
+    }
+
+    await solicitudBuscada.destroy();
+    return {mensaje: "La solicitud ha sido eliminada con éxito"}
+
+  }
+
+export {crearSolicitudCDT, actualizarSolicitudCDT, eliminarSolicitudCDT}

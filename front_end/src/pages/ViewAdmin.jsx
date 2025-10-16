@@ -1,4 +1,3 @@
-import React from "react";
 import { useNavigate } from "react-router-dom";
 import "../styles/form.css";
 
@@ -17,13 +16,13 @@ export const ViewAdmin = () => {
                             <td>
                                 <div className="form">
                                     <h3>Crear agentes</h3>
-                                    <button type="button" onClick={() => navigate('/')}>Ingresar</button>
+                                    <button type="button" onClick={() => navigate('/create-agent')}>Ingresar</button>
                                 </div>
                             </td>
                             <td>
                                 <div className="form">
                                     <h3>Gestionar CDT'S</h3>
-                                    <button type="button" onClick={() => navigate('/')}>Ingresar</button>
+                                    <button type="button" onClick={() => navigate('/requests-list')}>Ingresar</button>
                                 </div>
                             </td>
                         </tr>

@@ -27,16 +27,16 @@ export const CreateCdt = () => {
 
     const handleConfirm = () => {
         setShowSummary(false);
-        navigate("/");
+        navigate("/my-requests");
     }
 
     const handleCancel = () => {
         if (form.value || form.months) {
             setShowSummary(false);
-            navigate("/");
+            navigate("/my-requests");
             return;
         }
-        navigate("/");
+        navigate("/my-requests");
     }
 
     const formattedCurrency = (n) => {
