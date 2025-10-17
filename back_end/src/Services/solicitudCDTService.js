@@ -70,7 +70,7 @@ import { Op } from "sequelize";
         const tasaEfectiva = calcularInteresCDT(tiempo ? Number(tiempo) : 0);
         const montoFinal = calcularGananciaCDT(solicitud.montoInicial, tasaEfectiva);
         solicitud.tasaInteres = tasaEfectiva;
-        solicitud.montoGanancia = montoFinal;
+        solicitud.montoGanancia = Math.trunc(montoFinal);
 
         const nuevaSolicitud = await solicitudCDT.create(solicitud);
         return nuevaSolicitud;
@@ -137,7 +137,7 @@ const crearSolicitudEnValidacion = async (solicitud) => {
             const tasaEfectiva = calcularInteresCDT(tiempo ? Number(tiempo) : 0);
             const montoFinal = calcularGananciaCDT(montoInicial, tasaEfectiva);
             solicitud.tasaInteres = tasaEfectiva;
-            solicitud.montoGanancia = montoFinal;
+            solicitud.montoGanancia = Math.trunc(montoFinal);
 
             const nuevaSolicitud = await solicitudCDT.create(solicitud);
             return nuevaSolicitud;
@@ -179,12 +179,14 @@ const crearSolicitudEnValidacion = async (solicitud) => {
         const tasaEfectiva = calcularInteresCDT(Number(tiempoExist));
         const montoFinal = calcularGananciaCDT(Number(montoExist), tasaEfectiva);
         solicitudBuscada.tasaInteres = tasaEfectiva;
-        solicitudBuscada.montoGanancia = montoFinal;
+        solicitudBuscada.montoGanancia = Math.trunc(montoFinal);
         solicitudBuscada.estado = "enValidacion";
         await solicitudBuscada.save();
 
         return solicitudBuscada;
     }
+
+    const estadosPermitidos = ["Aprobada", "Rechazada"];
 
     const actualizarSolicitudCDT = async (solicitud, nuevoEstado) => {
         const solicitudBuscada = await solicitudCDT.findOne({
@@ -194,11 +196,18 @@ const crearSolicitudEnValidacion = async (solicitud) => {
         if (!solicitudBuscada) {
             throw new Error("Solicitud no encontrada");
         }
-        
+
+        if (solicitudBuscada.estado !== "enValidacion"){
+            throw new Error("La solicitud solo se puede actualizar si está en estado en validacion");
+        }
+
+        if (!estadosPermitidos.includes(nuevoEstado)){
+            throw new Error ("Solo se puede actualizar a los estados: Aprobada o Rechazada");
+        }
+
         solicitudBuscada.estado = nuevoEstado;
         await solicitudBuscada.save();
-
-        return solicitudBuscada;
+        return {mensaje: "La solicitud a sido actualizada al estado " + nuevoEstado + "."}
     }
 
   const cancelarSolicitudCDT = async (solicitud) => {
@@ -215,7 +224,7 @@ const crearSolicitudEnValidacion = async (solicitud) => {
         await solicitudBuscada.save();
         return { mensaje: "La solicitud ha sido cancelada con éxito" }; 
     } else {
-        throw new Error ("La solicitud no se puede cancelar porque");
+        throw new Error ("La solicitud no se puede cancelar");
     }
   }
 
@@ -247,20 +256,19 @@ const crearSolicitudEnValidacion = async (solicitud) => {
     return solicitudesPorUsuario;
   }
 
-  const listarSolicitudesCDTEstado = async () => {
+  const listarSolicitudesCDTEstado = async (numUsuario) => {
 
-    const solicitudesPorEstado = await solicitudCDT.findAll({
+    const solicitudesPorUsuarioEstado = await solicitudCDT.findAll({
         where: {
+            numUsuario: numUsuario,
             estado: { [Op.in]: ["Borrador", "enValidacion"] }
         }
     });
 
-    if (!solicitudesPorEstado || solicitudesPorEstado.length === 0){
+    if (!solicitudesPorUsuarioEstado || solicitudesPorUsuarioEstado.length === 0){
         throw new Error("No se encontraron ningunas solicitudes pendientes");
     }
-
-    return solicitudesPorEstado;
-
+    return solicitudesPorUsuarioEstado;
   }
 
 export {crearSolicitudEnBorradorCDT, crearSolicitudEnValidacion, actualizarSolicitudCDT, cancelarSolicitudCDT, eliminarSolicitudCDT, listarSolicitudesCDTUsuario, listarSolicitudesCDTEstado}

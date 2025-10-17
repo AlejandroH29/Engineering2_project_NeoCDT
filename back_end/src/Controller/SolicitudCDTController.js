@@ -79,13 +79,12 @@ const actualizarSolicitudCDTController = async (req, res, next) => {
 
 const cancelarSolicitudCDTController = async (req, res, next) => {
     try {
-        const solicitud = req.params.numero;
-        const solicitudCDTCancelada = await cancelarSolicitudCDT(solicitud);
+        const numero = req.params.numero;
+        const solicitudCDTCancelada = await cancelarSolicitudCDT({numero});
         res.status(200).json(solicitudCDTCancelada);
     } catch (err){
         next(err)
     }
-
 };
 
 const eliminarSolicitudCDTController = async (req, res, next) => {
@@ -110,7 +109,8 @@ const listarSolicitudesCDTUsuarioController = async (req, res, next) => {
 
 const listarSolicitudesCDTEstadoController = async (req, res, next) => {
     try{
-        const listadoSolicitudesEstado = await listarSolicitudesCDTEstado();
+        const numUsuario = req.params.numUsuario;
+        const listadoSolicitudesEstado = await listarSolicitudesCDTEstado(numUsuario);
         res.status(200).json(listadoSolicitudesEstado);
     }catch(err){
         next(err)
