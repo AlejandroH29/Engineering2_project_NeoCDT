@@ -17,7 +17,7 @@ const solicitudCDT = sequelize.define("solicitudCDT",{
     },
     tiempo:{
         type: DataTypes.ENUM("3","6","9","12"),
-        allowNull: false
+        allowNull: true
     },
     tasaInteres:{
         type: DataTypes.DOUBLE,
@@ -25,7 +25,7 @@ const solicitudCDT = sequelize.define("solicitudCDT",{
     },
     montoInicial:{
         type: DataTypes.INTEGER,
-        allowNull:false
+        allowNull:true
     },
     montoGanancia:{
         type: DataTypes.INTEGER,
