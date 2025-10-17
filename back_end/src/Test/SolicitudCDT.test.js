@@ -6,7 +6,7 @@ jest.mock("../Models/solicitudCDTModel.js", () => ({
 }));
 
 import { solicitudCDT } from "../Models/solicitudCDTModel.js";
-import { crearSolicitudEnBorradorCDT, crearSolicitudEnValidacion } from "../Services/solicitudCDTService.js";
+import { crearSolicitudEnBorradorCDT, crearSolicitudEnValidacion, actualizarSolicitudCDT, cancelarSolicitudCDT, eliminarSolicitudCDT } from "../Services/solicitudCDTService.js";
 
 describe("SolicitudCDTService - crearSolicitudEnBorradorCDT", () => {
     beforeEach(async () => {
@@ -118,4 +118,148 @@ describe("SolicitudCDTService - crearSolicitudEnValidacion", () => {
 
         await expect(crearSolicitudEnValidacion(payload)).rejects.toThrow("El tiempo es obligatorio y no puede estar vacío");
     });
+
+    describe("SolicitudCDTService - actualizarSolicitudCDT", () => {
+        beforeEach(() => {
+            jest.clearAllMocks();
+        });
+    
+        it("debe actualizar el estado a Aprobada si está enValidacion", async () => {
+            const mockSave = jest.fn().mockResolvedValue(true);
+            const solicitudExistente = {
+                numero: "123456",
+                estado: "enValidacion",
+                save: mockSave
+            };
+            solicitudCDT.findOne.mockResolvedValue(solicitudExistente);
+    
+            const result = await actualizarSolicitudCDT({ numero: "123456" }, "Aprobada");
+    
+            expect(solicitudCDT.findOne).toHaveBeenCalledWith({ where: { numero: "123456" } });
+            expect(mockSave).toHaveBeenCalled();
+            expect(result).toHaveProperty("mensaje");
+            expect(result.mensaje).toMatch(/Aprobada/);
+        });
+    
+        it("debe lanzar error si el estado no es enValidacion", async () => {
+            solicitudCDT.findOne.mockResolvedValue({
+                numero: "123456",
+                estado: "Borrador",
+                save: jest.fn()
+            });
+    
+            await expect(actualizarSolicitudCDT({ numero: "123456" }, "Aprobada"))
+                .rejects
+                .toThrow("La solicitud solo se puede actualizar si está en estado en validacion");
+        });
+    
+        it("debe lanzar error si el nuevo estado no es permitido", async () => {
+            solicitudCDT.findOne.mockResolvedValue({
+                numero: "123456",
+                estado: "enValidacion",
+                save: jest.fn()
+            });
+    
+            await expect(actualizarSolicitudCDT({ numero: "123456" }, "Cancelada"))
+                .rejects
+                .toThrow("Solo se puede actualizar a los estados: Aprobada o Rechazada");
+        });
+    
+        it("debe lanzar error si la solicitud no existe", async () => {
+            solicitudCDT.findOne.mockResolvedValue(null);
+    
+            await expect(actualizarSolicitudCDT({ numero: "999999" }, "Aprobada"))
+                .rejects
+                .toThrow("Solicitud no encontrada");
+        });
+    });
+
+    describe("SolicitudCDTService - cancelarSolicitudCDT", () => {
+        beforeEach(() => {
+            jest.clearAllMocks();
+        });
+
+        it("debe cancelar la solicitud si está en Borrador", async () => {
+            const mockSave = jest.fn().mockResolvedValue(true);
+            solicitudCDT.findOne.mockResolvedValue({
+                numero: "111111",
+                estado: "Borrador",
+                save: mockSave
+            });
+
+            const result = await cancelarSolicitudCDT({ numero: "111111" });
+
+            expect(solicitudCDT.findOne).toHaveBeenCalledWith({ where: { numero: "111111" } });
+            expect(mockSave).toHaveBeenCalled();
+            expect(result).toHaveProperty("mensaje");
+            expect(result.mensaje).toMatch(/cancelada/i);
+        });
+
+        it("debe cancelar la solicitud si está en enValidacion", async () => {
+            const mockSave = jest.fn().mockResolvedValue(true);
+            solicitudCDT.findOne.mockResolvedValue({
+                numero: "222222",
+                estado: "enValidacion",
+                save: mockSave
+            });
+
+            const result = await cancelarSolicitudCDT({ numero: "222222" });
+
+            expect(solicitudCDT.findOne).toHaveBeenCalledWith({ where: { numero: "222222" } });
+            expect(mockSave).toHaveBeenCalled();
+            expect(result.mensaje).toMatch(/cancelada/i);
+        });
+
+        it("debe lanzar error si la solicitud no está en estado permitido", async () => {
+            solicitudCDT.findOne.mockResolvedValue({
+                numero: "333333",
+                estado: "Aprobada",
+                save: jest.fn()
+            });
+
+            await expect(cancelarSolicitudCDT({ numero: "333333" }))
+                .rejects
+                .toThrow("La solicitud no se puede cancelar");
+        });
+
+        it("debe lanzar error si la solicitud no existe", async () => {
+            solicitudCDT.findOne.mockResolvedValue(null);
+
+            await expect(cancelarSolicitudCDT({ numero: "444444" }))
+                .rejects
+                .toThrow("Solicitud no encontrada");
+        });
+    });
+
+    describe("SolicitudCDTService - eliminarSolicitudCDT", () => {
+        beforeEach(() => {
+            jest.clearAllMocks();
+        });
+
+        it("debe eliminar la solicitud si existe", async () => {
+            const mockDestroy = jest.fn().mockResolvedValue(true);
+            solicitudCDT.findOne.mockResolvedValue({
+                numero: "555555",
+                destroy: mockDestroy
+            });
+
+            const { eliminarSolicitudCDT } = require("../Services/solicitudCDTService.js");
+            const result = await eliminarSolicitudCDT({ numero: "555555" });
+
+            expect(solicitudCDT.findOne).toHaveBeenCalledWith({ where: { numero: "555555" } });
+            expect(mockDestroy).toHaveBeenCalled();
+            expect(result).toHaveProperty("mensaje");
+            expect(result.mensaje).toMatch(/eliminada/i);
+        });
+
+        it("debe lanzar error si la solicitud no existe", async () => {
+            solicitudCDT.findOne.mockResolvedValue(null);
+
+            const { eliminarSolicitudCDT } = require("../Services/solicitudCDTService.js");
+            await expect(eliminarSolicitudCDT({ numero: "666666" }))
+                .rejects
+                .toThrow("Solicitud no encontrada");
+        });
+    });
+
 });
