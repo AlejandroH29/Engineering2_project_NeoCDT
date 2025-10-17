@@ -3,15 +3,15 @@
 <html lang="en">
 
 <head>
-    <title>Code coverage report for UsuarioService.js</title>
+    <title>Code coverage report for Config/configDatabase.js</title>
     <meta charset="utf-8" />
-    <link rel="stylesheet" href="prettify.css" />
-    <link rel="stylesheet" href="base.css" />
-    <link rel="shortcut icon" type="image/x-icon" href="favicon.png" />
+    <link rel="stylesheet" href="../prettify.css" />
+    <link rel="stylesheet" href="../base.css" />
+    <link rel="shortcut icon" type="image/x-icon" href="../favicon.png" />
     <meta name="viewport" content="width=device-width, initial-scale=1" />
     <style type='text/css'>
         .coverage-summary .sorter {
-            background-image: url(sort-arrow-sprite.png);
+            background-image: url(../sort-arrow-sprite.png);
         }
     </style>
 </head>
@@ -19,34 +19,34 @@
 <body>
 <div class='wrapper'>
     <div class='pad1'>
-        <h1><a href="index.html">All files</a> UsuarioService.js</h1>
+        <h1><a href="../index.html">All files</a> / <a href="index.html">Config</a> configDatabase.js</h1>
         <div class='clearfix'>
             
             <div class='fl pad1y space-right2'>
-                <span class="strong">76.92% </span>
+                <span class="strong">70% </span>
                 <span class="quiet">Statements</span>
-                <span class='fraction'>10/13</span>
+                <span class='fraction'>7/10</span>
             </div>
         
             
             <div class='fl pad1y space-right2'>
                 <span class="strong">50% </span>
                 <span class="quiet">Branches</span>
-                <span class='fraction'>3/6</span>
+                <span class='fraction'>2/4</span>
             </div>
         
             
             <div class='fl pad1y space-right2'>
                 <span class="strong">100% </span>
                 <span class="quiet">Functions</span>
-                <span class='fraction'>2/2</span>
+                <span class='fraction'>1/1</span>
             </div>
         
             
             <div class='fl pad1y space-right2'>
-                <span class="strong">76.92% </span>
+                <span class="strong">70% </span>
                 <span class="quiet">Lines</span>
-                <span class='fraction'>10/13</span>
+                <span class='fraction'>7/10</span>
             </div>
         
             
@@ -84,84 +84,65 @@
 <a name='L19'></a><a href='#L19'>19</a>
 <a name='L20'></a><a href='#L20'>20</a>
 <a name='L21'></a><a href='#L21'>21</a>
-<a name='L22'></a><a href='#L22'>22</a>
-<a name='L23'></a><a href='#L23'>23</a>
-<a name='L24'></a><a href='#L24'>24</a>
-<a name='L25'></a><a href='#L25'>25</a>
-<a name='L26'></a><a href='#L26'>26</a>
-<a name='L27'></a><a href='#L27'>27</a>
-<a name='L28'></a><a href='#L28'>28</a></td><td class="line-coverage quiet"><span class="cline-any cline-neutral">&nbsp;</span>
-<span class="cline-any cline-neutral">&nbsp;</span>
-<span class="cline-any cline-yes">1x</span>
+<a name='L22'></a><a href='#L22'>22</a></td><td class="line-coverage quiet"><span class="cline-any cline-neutral">&nbsp;</span>
 <span class="cline-any cline-yes">1x</span>
 <span class="cline-any cline-neutral">&nbsp;</span>
 <span class="cline-any cline-neutral">&nbsp;</span>
+<span class="cline-any cline-neutral">&nbsp;</span>
+<span class="cline-any cline-yes">1x</span>
+<span class="cline-any cline-yes">1x</span>
 <span class="cline-any cline-yes">1x</span>
 <span class="cline-any cline-no">&nbsp;</span>
 <span class="cline-any cline-neutral">&nbsp;</span>
-<span class="cline-any cline-yes">1x</span>
-<span class="cline-any cline-yes">1x</span>
-<span class="cline-any cline-neutral">&nbsp;</span>
-<span class="cline-any cline-neutral">&nbsp;</span>
-<span class="cline-any cline-yes">1x</span>
-<span class="cline-any cline-yes">1x</span>
-<span class="cline-any cline-neutral">&nbsp;</span>
-<span class="cline-any cline-neutral">&nbsp;</span>
-<span class="cline-any cline-yes">1x</span>
 <span class="cline-any cline-no">&nbsp;</span>
+<span class="cline-any cline-neutral">&nbsp;</span>
+<span class="cline-any cline-neutral">&nbsp;</span>
+<span class="cline-any cline-neutral">&nbsp;</span>
+<span class="cline-any cline-yes">1x</span>
 <span class="cline-any cline-neutral">&nbsp;</span>
 <span class="cline-any cline-yes">1x</span>
 <span class="cline-any cline-no">&nbsp;</span>
 <span class="cline-any cline-neutral">&nbsp;</span>
 <span class="cline-any cline-neutral">&nbsp;</span>
 <span class="cline-any cline-yes">1x</span>
-<span class="cline-any cline-neutral">&nbsp;</span>
-<span class="cline-any cline-neutral">&nbsp;</span>
-<span class="cline-any cline-neutral">&nbsp;</span></td><td class="text"><pre class="prettyprint lang-js">import { Usuario } from "../Models/UsuarioModel.js";
-&nbsp;
-const crearUsuario = async (usuario) =&gt;{
-    const usuarioPorEmail = await Usuario.findOne({
-        where: { correo: usuario.correo}
-    })
-    <span class="missing-if-branch" title="if path not taken" >I</span>if(usuarioPorEmail != null){
-<span class="cstat-no" title="statement not covered" >        throw new Error("El correo de usuario ya esta en uso");</span>
+<span class="cline-any cline-neutral">&nbsp;</span></td><td class="text"><pre class="prettyprint lang-js">import { Sequelize } from "sequelize";
+const sequelize = new Sequelize("BDProyectoIngesoft2","root","Root1234",{
+    host: "localhost",
+    dialect: "mysql"
+});
+const testConnection = async() =&gt;{
+    try{
+        await sequelize.authenticate();
+<span class="cstat-no" title="statement not covered" >        console.log("Conexion con la base de datos establecida");</span>
+    }catch(error){
+<span class="cstat-no" title="statement not covered" >        console.log("Conexion con la base de datos fallida");</span>
     }
-    const nuevoUsuario = await Usuario.create(usuario);
-    return nuevoUsuario;
 }
 &nbsp;
-const validarInicioSesion = async (correo, contraseña) =&gt;{
-    const usuarioPorCorreo = await Usuario.findOne({
-        where: { correo: correo}
-    })
-    <span class="missing-if-branch" title="if path not taken" >I</span>if(usuarioPorCorreo == null){
-<span class="cstat-no" title="statement not covered" >        throw new Error("El usuario no se encontro o no existe");</span>
-    }else{
-        <span class="missing-if-branch" title="if path not taken" >I</span>if(usuarioPorCorreo.contrasena !== contraseña){
-<span class="cstat-no" title="statement not covered" >            throw new Error("Contraseña incorrecta");</span>
-        }
-    }
-    return usuarioPorCorreo; 
+const isTest = process.env.NODE_ENV === 'test' || <span class="branch-1 cbranch-no" title="branch not covered" >process.env.JEST_WORKER_ID !== undefined;</span>
+&nbsp;
+<span class="missing-if-branch" title="if path not taken" >I</span>if (!isTest) {
+<span class="cstat-no" title="statement not covered" >    testConnection();</span>
 }
 &nbsp;
-export {crearUsuario, validarInicioSesion};</pre></td></tr></table></pre>
+testConnection();
+export {sequelize, testConnection}</pre></td></tr></table></pre>
 
                 <div class='push'></div><!-- for sticky footer -->
             </div><!-- /wrapper -->
             <div class='footer quiet pad2 space-top1 center small'>
                 Code coverage generated by
                 <a href="https://istanbul.js.org/" target="_blank" rel="noopener noreferrer">istanbul</a>
-                at 2025-10-17T18:19:39.044Z
-                at 2025-10-17T17:08:10.264Z
+                at 2025-10-17T19:01:32.981Z
             </div>
-        <script src="prettify.js"></script>
+        <script src="../prettify.js"></script>
         <script>
             window.onload = function () {
                 prettyPrint();
             };
         </script>
-        <script src="sorter.js"></script>
-        <script src="block-navigation.js"></script>
+        <script src="../sorter.js"></script>
+        <script src="../block-navigation.js"></script>
     </body>
 </html>
     
