@@ -1,16 +1,31 @@
+import {useContext} from 'react'
+import { AuthContext } from '../context/AuthContext'
 
-export const RequestCard = ({estado, monto, plazo, onDelete, onEdit}) => {
+export const RequestCard = ({estado, monto, plazo, onDelete, onEdit, onApprove, onDecile}) => {
+    const {currentUser} = useContext(AuthContext)
+
     return (
         <div className="request-card" >
-            <p>{estado}</p>
             <p>{monto}</p>
             <p>{plazo}</p>
-            {estado !== "Aprobada" && (
-                <div>
-                    <button onClick={onEdit}>Editar</button>
-                    <button onClick={onDelete}>Eliminar</button>
-                </div>
-                )}
+            {currentUser.tipo === "Cliente" ? (
+                <>
+                    <p>{estado}</p>
+                    {estado !== "Aprobada" && (
+                        <div>
+                            <button onClick={onEdit}>Editar</button>
+                            <button onClick={onDelete}>Eliminar</button>
+                        </div>
+                    )}
+                </>
+            ) : (
+                <>
+                    <p>Solicitud de: {solicitante}</p>
+                    <button onClick={onApprove} >Aprobar</button>
+                    <button onClick={onDecile} >Rechazar</button>
+                </>
+            )
+            }            
         </div>
     )
 }

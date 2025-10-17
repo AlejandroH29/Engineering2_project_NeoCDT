@@ -4,7 +4,7 @@ import { Popup } from "../components/Popup";
 import { useNavigate } from "react-router-dom";
 import "../styles/form.css"
 
-export const CreateCdt = () => {
+export const RequestForm = () => {
 
     const [form, setForm] = useState({ value: "", months: "3" });
     const [showSummary, setShowSummary] = useState(false);

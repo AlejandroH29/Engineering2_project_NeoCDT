@@ -5,7 +5,7 @@ import {Route, Routes} from "react-router-dom"
 import { ViewAdmin } from "../pages/ViewAdmin"
 import { ViewAgent } from "../pages/ViewAgent"
 import { ViewClient } from "../pages/ViewClient"
-import { CreateCdt } from "../pages/CreateCdt"
+import { RequestForm } from "../pages/RequestForm"
 import { RequestsList } from "../pages/RequestsList"
 import { MyRequests } from "../pages/MyRequests"
 import { PrivateRoute } from "../components/PrivateRoute"
@@ -21,10 +21,10 @@ export const AppRoutes = () => {
                     // </PrivateRoute>
                         <CreateAgent/>
                 } />
-                <Route path="/create-cdt" element={
+                <Route path="/RequestForm" element={
                     // <PrivateRoute>
                     // </PrivateRoute>
-                        <CreateCdt/>
+                        <RequestForm/>
                 } />
                 <Route path="/requests-list" element={
                     // <PrivateRoute>
