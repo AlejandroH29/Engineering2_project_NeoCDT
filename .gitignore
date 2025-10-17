@@ -1,2 +1,2 @@
 node_modules
-/src/Config/configDatabase.js
+back_end/src/Config/configDatabase.js

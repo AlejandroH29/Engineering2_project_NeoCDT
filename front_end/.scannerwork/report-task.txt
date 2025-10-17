@@ -2,5 +2,5 @@ projectKey=Analisis_frontend
 serverUrl=http://localhost:9000
 serverVersion=25.10.0.114319
 dashboardUrl=http://localhost:9000/dashboard?id=Analisis_frontend
-ceTaskId=35d06207-c8f6-44f8-bfb6-91f7b96dff1d
-ceTaskUrl=http://localhost:9000/api/ce/task?id=35d06207-c8f6-44f8-bfb6-91f7b96dff1d
+ceTaskId=eaea09e1-377d-4b53-86e7-a2d063724fdd
+ceTaskUrl=http://localhost:9000/api/ce/task?id=eaea09e1-377d-4b53-86e7-a2d063724fdd
