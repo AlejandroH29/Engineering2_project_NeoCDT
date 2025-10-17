@@ -7,13 +7,9 @@
     "dev": "vite",
     "build": "vite build",
     "lint": "eslint .",
-<<<<<<< HEAD
     "lint:fix": "eslint . --fix",
-    "preview": "vite preview"
-=======
     "preview": "vite preview",
     "test": "jest --coverage"
->>>>>>> 3f661841c4a6dd16235e48de9cb6b5d46c7d2da2
   },
   "dependencies": {
     "axios": "^1.12.2",
@@ -22,26 +18,18 @@
     "react-router-dom": "^7.9.3"
   },
   "devDependencies": {
-<<<<<<< HEAD
     "@eslint/js": "^9.37.0",
     "@types/react": "^19.1.13",
     "@types/react-dom": "^19.1.9",
     "@vitejs/plugin-react": "^5.0.3",
     "eslint": "^9.37.0",
     "eslint-plugin-react": "^7.37.5",
-=======
     "@babel/preset-env": "^7.28.3",
     "@babel/preset-react": "^7.27.1",
-    "@eslint/js": "^9.36.0",
     "@testing-library/jest-dom": "^6.9.1",
     "@testing-library/react": "^16.3.0",
     "@types/jest": "^30.0.0",
-    "@types/react": "^19.1.13",
-    "@types/react-dom": "^19.1.9",
-    "@vitejs/plugin-react": "^5.0.3",
     "babel-jest": "^30.2.0",
-    "eslint": "^9.36.0",
->>>>>>> 3f661841c4a6dd16235e48de9cb6b5d46c7d2da2
     "eslint-plugin-react-hooks": "^5.2.0",
     "eslint-plugin-react-refresh": "^0.4.20",
     "globals": "^16.4.0",

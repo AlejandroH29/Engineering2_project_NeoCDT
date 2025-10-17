@@ -25,7 +25,6 @@ export default [
     }
   },
   {
-<<<<<<< HEAD
     files: ["**/*.{test.js,spec.js}"],
     languageOptions: {
       globals: globals.jest
@@ -37,12 +36,10 @@ export default [
       "**/dist/**",
       "**/.vscode/**"
     ]
-  }
-];
-=======
+  },
+{
     env:{
       jest: true
     }
   }
-])
->>>>>>> 3f661841c4a6dd16235e48de9cb6b5d46c7d2da2
+]

@@ -1,5 +1,5 @@
 import { render, screen } from '@testing-library/react';
-import { Register } from '../src/pages/Register';
+import { Register } from '../pages/Register';
 
 jest.mock('react-router-dom', () => ({
   useNavigate: () => jest.fn(),
