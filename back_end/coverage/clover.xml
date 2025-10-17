@@ -1,6 +1,6 @@
 <?xml version="1.0" encoding="UTF-8"?>
-<coverage generated="1760141269653" clover="3.2.0">
-  <project timestamp="1760141269653" name="All files">
+<coverage generated="1760666141554" clover="3.2.0">
+  <project timestamp="1760666141554" name="All files">
     <metrics statements="13" coveredstatements="10" conditionals="6" coveredconditionals="3" methods="2" coveredmethods="2" elements="21" coveredelements="15" complexity="0" loc="13" ncloc="13" packages="1" files="1" classes="1"/>
     <file name="UsuarioService.js" path="C:\Users\dhfdi\OneDrive\Escritorio\Engineering2_proyect\Engineering2_project_NeoCDT\back_end\src\Services\UsuarioService.js">
       <metrics statements="13" coveredstatements="10" conditionals="6" coveredconditionals="3" methods="2" coveredmethods="2"/>

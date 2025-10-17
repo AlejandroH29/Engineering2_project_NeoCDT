@@ -5,7 +5,9 @@
   "main": "App.js",
   "type": "module",
   "scripts": {
-    "test": "jest --coverage"
+    "test": "jest --coverage",
+    "lint": "eslint .",
+    "lint:fix": "eslint . --fix"
   },
   "keywords": [],
   "author": "",
@@ -14,12 +16,15 @@
     "cors": "^2.8.5",
     "express": "^5.1.0",
     "mysql2": "^3.15.1",
-    "sequelize": "^6.37.7"
+    "sequelize": "^6.37.7"  
   },
   "devDependencies": {
     "@babel/plugin-transform-modules-commonjs": "^7.27.1",
     "@babel/preset-env": "^7.28.3",
+    "@eslint/js": "^9.37.0",
     "babel-jest": "^30.2.0",
+    "eslint": "^9.37.0",
+    "globals": "^16.4.0",
     "jest": "^30.2.0"
   }
 }
