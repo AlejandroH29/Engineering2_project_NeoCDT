@@ -47,9 +47,10 @@ export const Register = () => {
                 name='nombreCompleto'
                 value={formData.nombreCompleto}
                 onChange={handleChange}
+                required
                 />
                 <label htmlFor="tipoIdentificacion">Tipo de identificacion</label>
-                <select name="tipoIdentificacion" value={formData.tipoIdentificacion} onChange={handleChange}>
+                <select name="tipoIdentificacion" value={formData.tipoIdentificacion} onChange={handleChange} required>
                     <option value="CC">CC</option>
                     <option value="CE">CE</option>
                     <option value="Pasaporte">Pasaporte</option>
@@ -80,7 +81,7 @@ export const Register = () => {
                     ¿Ya tienes una cuenta?{" "}
                     <a onClick={() => navigate("/")}>Login</a>
                 </p>
-                <p onClick={() => navigate("/create-agent")} >CREAR AGENTE</p>
+                <p onClick={() => navigate("/create-agent")} >CREAR AGENTE</p> {/*  QUITAR CUANDO ESTÉ LISTO */}
             </form>
         </div>
     )

@@ -9,6 +9,6 @@ router.put("/actualizarSolicitudCDT", actualizarSolicitudCDTController);
 router.put("/cancelarSolicitudCDT/:numero", cancelarSolicitudCDTController)
 router.delete("/eliminarSolicitudCDT/:numero", eliminarSolicitudCDTController);
 router.get("/listarSolicitudesUsuario/:numUsuario", listarSolicitudesCDTUsuarioController);
-router.get("/listarSolicitudesEstado", listarSolicitudesCDTEstadoController);
+router.get("/listarSolicitudesEstado/:numUsuario", listarSolicitudesCDTEstadoController);
 
 export default router;
