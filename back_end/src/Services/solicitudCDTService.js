@@ -271,4 +271,18 @@ const crearSolicitudEnValidacion = async (solicitud) => {
     return solicitudesPorUsuarioEstado;
   }
 
-export {crearSolicitudEnBorradorCDT, crearSolicitudEnValidacion, actualizarSolicitudCDT, cancelarSolicitudCDT, eliminarSolicitudCDT, listarSolicitudesCDTUsuario, listarSolicitudesCDTEstado}
+    const listarSolicitudesCDTPendientesAgente = async () => {
+
+    const listarSolicitudesCDTPendientesAgente = await solicitudCDT.findAll({
+        where: {
+            estado: { [Op.in]: ["enValidacion"] }
+        }
+    });
+
+    if (!listarSolicitudesCDTPendientesAgente || listarSolicitudesCDTPendientesAgente.length === 0){
+        throw new Error("No se encontraron ningunas solicitudes pendientes");
+    }
+    return listarSolicitudesCDTPendientesAgente;
+  }
+
+export {crearSolicitudEnBorradorCDT, crearSolicitudEnValidacion, actualizarSolicitudCDT, cancelarSolicitudCDT, eliminarSolicitudCDT, listarSolicitudesCDTUsuario, listarSolicitudesCDTEstado, listarSolicitudesCDTPendientesAgente}
