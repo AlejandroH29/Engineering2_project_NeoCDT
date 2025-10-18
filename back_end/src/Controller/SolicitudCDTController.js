@@ -1,4 +1,4 @@
-import { crearSolicitudEnBorradorCDT, crearSolicitudEnValidacion, actualizarSolicitudCDT, cancelarSolicitudCDT ,eliminarSolicitudCDT, listarSolicitudesCDTUsuario, listarSolicitudesCDTEstado, listarSolicitudesCDTPendientesAgente } from "../Services/solicitudCDTService.js";
+import { crearSolicitudEnBorradorCDT, crearSolicitudEnValidacion, actualizarSolicitudCDT, cancelarSolicitudCDT ,eliminarSolicitudCDT, listarSolicitudesCDTUsuario, listarSolicitudesCDTBorrador, listarSolicitudesEnValidacion, listarSolicitudesCDTPendientesAgente } from "../Services/solicitudCDTService.js";
 
 const crearSolicitudEnBorradorCDTController = async (req, res, next) => {
     try {
@@ -107,11 +107,21 @@ const listarSolicitudesCDTUsuarioController = async (req, res, next) => {
     }
 }
 
-const listarSolicitudesCDTEstadoController = async (req, res, next) => {
+const listarSolicitudesCDTBorradorController = async (req, res, next) => {
     try{
         const numUsuario = req.params.numUsuario;
-        const listadoSolicitudesEstado = await listarSolicitudesCDTEstado(numUsuario);
-        res.status(200).json(listadoSolicitudesEstado);
+        const listadoSolicitudesBorrador = await listarSolicitudesCDTBorrador(numUsuario);
+        res.status(200).json(listadoSolicitudesBorrador);
+    }catch(err){
+        next(err)
+    }
+}
+
+const listarSolicitudesEnValidacionController = async (req, res, next) => {
+    try{
+        const numUsuario = req.params.numUsuario;
+        const listadoSolicitudesEnValidacion = await listarSolicitudesEnValidacion(numUsuario);
+        res.status(200).json(listadoSolicitudesEnValidacion);
     }catch(err){
         next(err)
     }
@@ -126,4 +136,6 @@ const listarSolicitudesCDTPendientesAgenteController = async (req, res, next) =>
     }
 };
 
-export {crearSolicitudEnBorradorCDTController, crearSolicitudEnValidacionController, actualizarSolicitudCDTController, cancelarSolicitudCDTController, eliminarSolicitudCDTController, listarSolicitudesCDTUsuarioController, listarSolicitudesCDTEstadoController, listarSolicitudesCDTPendientesAgenteController}
+export {crearSolicitudEnBorradorCDTController, crearSolicitudEnValidacionController, actualizarSolicitudCDTController, 
+        cancelarSolicitudCDTController, eliminarSolicitudCDTController, listarSolicitudesCDTUsuarioController, 
+        listarSolicitudesCDTBorradorController, listarSolicitudesEnValidacionController, listarSolicitudesCDTPendientesAgenteController}

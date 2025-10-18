@@ -256,19 +256,34 @@ const crearSolicitudEnValidacion = async (solicitud) => {
     return solicitudesPorUsuario;
   }
 
-  const listarSolicitudesCDTEstado = async (numUsuario) => {
+  const listarSolicitudesCDTBorrador = async (numUsuario) => {
 
-    const solicitudesPorUsuarioEstado = await solicitudCDT.findAll({
+    const listarSolicitudesCDTBorrador = await solicitudCDT.findAll({
         where: {
             numUsuario: numUsuario,
-            estado: { [Op.in]: ["Borrador", "enValidacion"] }
+            estado: "Borrador"
         }
     });
 
-    if (!solicitudesPorUsuarioEstado || solicitudesPorUsuarioEstado.length === 0){
+    if (!listarSolicitudesCDTBorrador || listarSolicitudesCDTBorrador.length === 0){
+        throw new Error("No se encontraron ningunas solicitudes en borrador");
+    }
+    return listarSolicitudesCDTBorrador;
+  }
+
+    const listarSolicitudesEnValidacion = async (numUsuario) => {
+
+    const listarSolicitudesEnValidacion = await solicitudCDT.findAll({
+        where: {
+            numUsuario: numUsuario,
+            estado: "enValidacion"
+        }
+    });
+
+    if (!listarSolicitudesEnValidacion || listarSolicitudesEnValidacion.length === 0){
         throw new Error("No se encontraron ningunas solicitudes pendientes");
     }
-    return solicitudesPorUsuarioEstado;
+    return listarSolicitudesEnValidacion;
   }
 
     const listarSolicitudesCDTPendientesAgente = async () => {
@@ -285,4 +300,4 @@ const crearSolicitudEnValidacion = async (solicitud) => {
     return listarSolicitudesCDTPendientesAgente;
   }
 
-export {crearSolicitudEnBorradorCDT, crearSolicitudEnValidacion, actualizarSolicitudCDT, cancelarSolicitudCDT, eliminarSolicitudCDT, listarSolicitudesCDTUsuario, listarSolicitudesCDTEstado, listarSolicitudesCDTPendientesAgente}
+export {crearSolicitudEnBorradorCDT, crearSolicitudEnValidacion, actualizarSolicitudCDT, cancelarSolicitudCDT, eliminarSolicitudCDT, listarSolicitudesCDTUsuario, listarSolicitudesCDTBorrador, listarSolicitudesEnValidacion, listarSolicitudesCDTPendientesAgente}
