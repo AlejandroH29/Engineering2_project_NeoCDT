@@ -9,36 +9,44 @@ export const MyRequests = () => {
     const {currentUser} = useContext(AuthContext)
     const [myRequests, setMyRequests] = useState([]);
 
-    useEffect(() => {
-        const listarSolicitudesPropias = async () => {
-            try{
-                const propios = await axios.get(`http://localhost:3000/listarSolicitudesUsuario/${currentUser.numero}`);
-                setMyRequests(propios.data);
-            }catch (error){
-                alert(error?.response?.data?.error);
-            }
+    const fetchRequests = async () => {
+        if (!currentUser?.numeroIdentificacion) return;
+        
+        try {
+            const response = await axios.get(
+                `http://localhost:3000/solicitudes/listarSolicitudesUsuario/${currentUser.numeroIdentificacion}`
+            );
+            setMyRequests(response.data);
+        } catch (error) {
+            alert(error?.response?.data?.error || "Error al cargar las solicitudes");
         }
-        listarSolicitudesPropias();
-    }, [])
+    };
+
+    useEffect(() => {
+        fetchRequests();
+    }, [currentUser])
 
     const handleEdit = () => {
         navigate("/request-form");
     }
 
     const handleCancel = async (requestNumber) => {
-        try{
-            await axios.put(`http://localhost:3000/cancelarSolicitudCDT/${requestNumber}`)
-        }
-        catch (error){
-            alert(error?.response?.data?.error)
+        try {
+            await axios.put(`http://localhost:3000/solicitudes/cancelarSolicitudCDT/${requestNumber}`);
+            alert("Solicitud cancelada exitosamente");
+            fetchRequests(); // Actualizar la lista después de cancelar
+        } catch (error) {
+            alert(error?.response?.data?.error || "Error al cancelar la solicitud");
         }
     }
 
     const handleDelete = async (requestNumber) => {
-        try{
-            await axios.delete(`http://localhost:3000/eliminarSolicitudCDT/${requestNumber}`)
-        }catch (error){
-            alert(error?.response?.data?.error)
+        try {
+            await axios.delete(`http://localhost:3000/solicitudes/eliminarSolicitudCDT/${requestNumber}`);
+            alert("Solicitud eliminada exitosamente");
+            fetchRequests(); // Actualizar la lista después de eliminar
+        } catch (error) {
+            alert(error?.response?.data?.error || "Error al eliminar la solicitud");
         }
     }
 
