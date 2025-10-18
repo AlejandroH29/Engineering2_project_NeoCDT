@@ -11,9 +11,6 @@ export const AuthProvider = ({children}) => {
 
     const login = (user) => {
         setCurrentUser(user);
-        if (currentUser) {
-            navigate("/dashboard")
-        }
     }
 
     const logout = () => {

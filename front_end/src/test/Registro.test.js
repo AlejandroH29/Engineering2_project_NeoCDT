@@ -18,3 +18,10 @@ test("Navegar al login", () => {
   fireEvent.click(screen.getByText("Login")); //Simula el click en el enlace de Login
   expect(mockNavigate).toHaveBeenCalledWith("/"); //Verifica que la función de navegación haya sido llamada con el argumento "/"
 })
+
+test("handleChange actualiza correctamente", () => {
+  const { getByPlaceholderText } = render(<Register />); //Permite buscar los elementos del componente por su placeholder
+  const emailInput = getByPlaceholderText('Ingresa tu correo electrónico'); //Guarda el input en una variable
+  fireEvent.change(emailInput, { target: { value: 'prueba@ejemplo.com' } }); //Simula un cambio en el input
+  expect(input.value).toBe('prueba@ejemplo.com'); //Verifica que el valor del input haya sido actualizado correctamente
+})
