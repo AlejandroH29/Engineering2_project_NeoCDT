@@ -17,6 +17,12 @@ export const Register = () => {
     
     const handleSubmit = async (e) => {
         e.preventDefault();
+        const passwordFormat = /^(?=.*[a-z])(?=.*[A-Z])(?=.*\d)(?=.*[\W_]).{8,}$/;
+        if (!passwordFormat.test(formData.contrasena)) {
+            alert("La contraseña no cumple los criterios de seguridad.");
+            return;
+        }
+        
         try {
             await axios.post("http://localhost:3000/usuarios/crearUsuario", formData)
             alert("Usuario creado con exito")

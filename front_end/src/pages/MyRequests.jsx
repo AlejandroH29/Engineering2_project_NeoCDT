@@ -1,4 +1,4 @@
-import {useContext, useState} from 'react'
+import {useContext, useEffect, useState} from 'react'
 import { AuthContext } from '../context/AuthContext'
 import { RequestCard } from '../components/RequestCard'
 import { useNavigate } from 'react-router-dom'
@@ -9,17 +9,39 @@ export const MyRequests = () => {
     const {currentUser} = useContext(AuthContext)
     const [myRequests, setMyRequests] = useState([]);
 
+    useEffect(() => {
+        const listarSolicitudesPropias = async () => {
+            try{
+                const propios = await axios.get(`http://localhost:3000/listarSolicitudesUsuario/${currentUser.numero}`);
+                setMyRequests(propios.data);
+            }catch (error){
+                alert(error?.response?.data?.error);
+            }
+        }
+        listarSolicitudesPropias();
+    }, [])
+
     const handleEdit = () => {
         navigate("/request-form");
     }
 
-    const handleDelete = async () => {
+    const handleCancel = async (requestNumber) => {
         try{
-            await axios.delete(`http://localhost:3000/eliminarSolicitudCDT/${request.numero}`)
+            await axios.put(`http://localhost:3000/cancelarSolicitudCDT/${requestNumber}`)
+        }
+        catch (error){
+            alert(error?.response?.data?.error)
+        }
+    }
+
+    const handleDelete = async (requestNumber) => {
+        try{
+            await axios.delete(`http://localhost:3000/eliminarSolicitudCDT/${requestNumber}`)
         }catch (error){
             alert(error?.response?.data?.error)
         }
     }
+
 
     return (
         <div>
@@ -35,7 +57,8 @@ export const MyRequests = () => {
                             plazo={request.tiempo}
                             monto={request.montoInicial}
                             onDelete={handleDelete}
-                            onEdit={handleEdit}
+                            onEdit={() => handleEdit(request.numero)}
+                            onCancel={() => handleCancel(request.numero)}
                             />
                         </div>
                     ))

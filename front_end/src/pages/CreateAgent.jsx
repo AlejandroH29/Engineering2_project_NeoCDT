@@ -2,6 +2,7 @@ import { useState } from "react"
 import { FormButton } from "../components/FormButton";
 import { Popup } from "../components/Popup";
 import { useNavigate } from "react-router-dom";
+import axios from "axios";
 
 export const CreateAgent = () => {
 
@@ -24,8 +25,32 @@ export const CreateAgent = () => {
         navigate("/dashboard");
     }
 
-    const handleCreateAgent = (e) => {
+    const handleCreateAgent = async (e) => {
         e.preventDefault();
+        const passwordFormat = /^(?=.*[a-z])(?=.*[A-Z])(?=.*\d)(?=.*[\W_]).{8,}$/;
+        if (!passwordFormat.test(formData.confirmPassword)) {
+            alert("La contraseña no cumple los criterios de seguridad.");
+            return;
+        }
+
+        if (agentData.password !== agentData.confirmPassword){
+            alert("Las contraseñas no coinciden");
+            return;
+        }
+
+        const newAgent = {
+            numeroIdentificacion: agentData.numId,
+            nombreCompleto: `Agente_${agentData.email.split("@")[0]}`,
+            tipoIdentificacion: "CC",
+            correo: agentData.email,
+            contrasena: agentData.confirmPassword,
+            tipo: "Agente"
+        }
+        try{
+            await axios.post("http://localhost:3000/crearUsuario", newAgent);
+        }catch (error) {
+            alert(error?.response?.data?.error);
+        }
         setSubmitPopup(true);
     }
 
@@ -36,7 +61,7 @@ export const CreateAgent = () => {
             <form className="form">
                 <label htmlFor="email">Número de documento</label>
                 <input
-                type="numId"
+                type="number"
                 placeholder='Número de docuemnto del agente'
                 name='numId'
                 value={agentData.numId}

@@ -1,8 +1,20 @@
-import {useState} from 'react'
+import {useEffect, useState} from 'react'
 import { RequestCard } from '../components/RequestCard'
 
 export const RequestsList = () => {
     const [pendingRequests, setPendingRequests] = useState([]);
+
+    useEffect(() => {
+        const listarSolicitudesPendientes = async () => {
+            try{
+                const pendientes = await axios.get("http://localhost:3000/listarSolicitudesCDTPendientes");
+                setPendingRequests(pendientes.data);
+            }catch (error){
+                alert(error?.response?.data?.error);
+            }
+        }
+        listarSolicitudesPendientes();
+    }, [])
 
     return (
         <div>
