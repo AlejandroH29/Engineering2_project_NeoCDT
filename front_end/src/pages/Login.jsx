@@ -20,10 +20,12 @@ export const Login = () => {
     const handleSubmit = async (e) => {
         e.preventDefault(); 
         try {
-            await axios.post("http://localhost:3000/usuarios/validarSesion", formData);
-            alert("Sesion iniciada")
-            login(formData);
-            switch (currentUser.tipo) {
+            const response = await axios.post("http://localhost:3000/usuarios/validarSesion", formData);
+            const userData = response.data;
+            alert("Sesion iniciada");
+            login(userData);
+            
+            switch (userData.tipo) {
                 case "Agente":
                     navigate("/agent");
                     break;

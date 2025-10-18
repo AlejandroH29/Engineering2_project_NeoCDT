@@ -21,10 +21,10 @@ export const AppRoutes = () => {
                     // </PrivateRoute>
                         <CreateAgent/>
                 } />
-                <Route path="/RequestForm" element={
-                    // <PrivateRoute>
-                    // </PrivateRoute>
+                <Route path="/request-form" element={
+                    <PrivateRoute>
                         <RequestForm/>
+                    </PrivateRoute>
                 } />
                 <Route path="/requests-list" element={
                     // <PrivateRoute>
