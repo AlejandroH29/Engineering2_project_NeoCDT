@@ -1,0 +1,133 @@
+.request-card {
+    padding: 15px;
+    margin: 0;
+    background-color: rgba(0, 0, 0, 0.05);
+    border-radius: 10px;
+    box-shadow: 0 4px 8px rgba(0, 0, 0, 0.1);
+}
+
+.request-card-header {
+    display: flex;
+    justify-content: space-between;
+    align-items: center;
+    margin-bottom: 0.75rem;
+}
+
+.request-number {
+    font-size: 0.875rem;
+    font-weight: 500;
+}
+
+.request-status {
+    padding: 0.25rem 0.5rem;
+    border-radius: 9999px;
+    font-size: 0.75rem;
+    font-weight: 600;
+}
+
+.request-status.validation {
+    background-color: #fef9c3;
+    color: #854d0e;
+}
+
+.request-status.approved {
+    background-color: #dcfce7;
+    color: #166534;
+}
+
+.request-status.rejected {
+    background-color: #fee2e2;
+    color: #991b1b;
+}
+
+.request-status.cancelled {
+    background-color: #f3f4f6;
+    color: #1f2937;
+}
+
+.request-details {
+    margin-bottom: 1rem;
+    display: flex;
+    flex-direction: column;
+    gap: 0.5rem;
+}
+
+.request-detail-item {
+    font-size: 0.875rem;
+}
+
+.request-detail-label {
+    font-weight: 500;
+}
+
+.request-actions {
+    display: flex;
+    gap: 0.5rem;
+    justify-content: flex-end;
+}
+
+.request-grid {
+    display: grid;
+    grid-template-columns: repeat(1, 1fr);
+    gap: 1rem;
+    padding: 20px;
+}
+
+@media (min-width: 768px) {
+    .request-grid {
+        grid-template-columns: repeat(2, 1fr);
+    }
+}
+
+@media (min-width: 1024px) {
+    .request-grid {
+        grid-template-columns: repeat(3, 1fr);
+    }
+}
+
+.request-button {
+    padding: 8px 16px;
+    font-size: 0.875rem;
+    border-radius: 5px;
+    font-weight: 500;
+    cursor: pointer;
+    transition: background-color 0.3s ease;
+    margin: 0;
+}
+
+.request-button.edit {
+    background-color: #646cff;
+    color: white;
+}
+
+.request-button.edit:hover {
+    background-color: #535bf2;
+}
+
+.request-button.cancel {
+    background-color: #ff9800;
+    color: white;
+}
+
+.request-button.cancel:hover {
+    background-color: #f57c00;
+}
+
+.request-button.delete {
+    background-color: #ff4444;
+    color: white;
+}
+
+.request-button.delete:hover {
+    background-color: #cc0000;
+}
+
+.empty-requests {
+    width: 600px;
+    text-align: center;
+}
+
+.requests-container {
+    width: 900px;
+    padding: 20px;
+}
