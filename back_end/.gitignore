@@ -1,3 +1,4 @@
 coverage
 .scannerwork
 node_modules
+src/Config/configDatabase.js

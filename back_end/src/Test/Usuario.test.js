@@ -25,6 +25,21 @@ describe("Validacion de creacion de usuario", ()=>{
             expect(ejecucion).toEqual(usuario);
         })
     })
+    describe("Correo ya en uso",()=>{
+        test("Deberia retornar mensaje de error", async ()=>{
+            const usuario = {
+                numeroIdentificacion: 100000000,
+                nombreCompleto: "Diego",
+                tipoIdentificacion: "CC",
+                correo: "ejemplo@gmail.com",
+                contrasena: "12345",
+                tipo: "Cliente"
+            }
+            Usuario.findOne.mockResolvedValue(usuario);
+            const resultado = crearUsuario(usuario);
+            await expect(resultado).rejects.toThrow();
+        })
+    })
 })
 
 describe("Validacion inicio de sesion", ()=>{
@@ -41,6 +56,32 @@ describe("Validacion inicio de sesion", ()=>{
             Usuario.findOne.mockResolvedValue(usuario);
             const resultado = await validarInicioSesion("ejemplo@gmail.com", "12345");
             expect(resultado).toEqual(usuario);
+        })
+    })
+    describe("El usuario que intenta ingresar no se encuentra",()=>{
+        test("Deberia retornar mensaje de error", async ()=>{
+            const correo = "ejemplo@gmail.com";
+            const contraseña = "12345";
+            Usuario.findOne.mockResolvedValue(null);
+            const resultado = validarInicioSesion(correo, contraseña);
+            await expect(resultado).rejects.toThrow();
+        })
+    })
+    describe("La contraseña es incorrecta",()=>{
+        test("Deberia retornar mensaje de error", async ()=>{
+            const correo = "ejemplo@gmail.com";
+            const contraseña = "1234567";
+            const usuario ={
+                numeroIdentificacion: 100000000,
+                nombreCompleto: "Diego",
+                tipoIdentificacion: "CC",
+                correo: "ejemplo@gmail.com",
+                contrasena: "12345",
+                tipo: "Cliente"
+            }
+            Usuario.findOne.mockResolvedValue(usuario);
+            const resultado = validarInicioSesion(correo, contraseña);
+            await expect(resultado).rejects.toThrow();
         })
     })
 });
