@@ -1,5 +1,4 @@
 import { solicitudCDT } from "../Models/solicitudCDTModel.js";
-import { Usuario } from "../Models/UsuarioModel.js";
 import { Op } from "sequelize";
 
      function calcularInteresCDT(diasInversion){

@@ -1,12 +1,12 @@
+import { solicitudCDT } from "../Models/solicitudCDTModel.js";
+import { crearSolicitudEnBorradorCDT, crearSolicitudEnValidacion, actualizarSolicitudCDT, cancelarSolicitudCDT, eliminarSolicitudCDT } from "../Services/solicitudCDTService.js";
+
 jest.mock("../Models/solicitudCDTModel.js", () => ({
     solicitudCDT: {
         findOne: jest.fn(),
         create: jest.fn()
     }
 }));
-
-import { solicitudCDT } from "../Models/solicitudCDTModel.js";
-import { crearSolicitudEnBorradorCDT, crearSolicitudEnValidacion, actualizarSolicitudCDT, cancelarSolicitudCDT, eliminarSolicitudCDT } from "../Services/solicitudCDTService.js";
 
 describe("SolicitudCDTService - crearSolicitudEnBorradorCDT", () => {
     beforeEach(async () => {
