@@ -7,6 +7,7 @@ import "../styles/form.css"
 
 export const RequestForm = () => {
     const { currentUser } = useContext(AuthContext);
+    const [amountAlert, setAmountAlert] = useState(false);
     const [form, setForm] = useState({ 
         montoInicial: "", 
         tiempo: "3"
@@ -17,7 +18,14 @@ export const RequestForm = () => {
 
     const handleChange = (e) => {
         const { name, value } = e.target;
-        setForm(prev => ({ ...prev, [name]: value }));
+        if (name === "montoInicial"){
+            const cleanedValue = value.replace(/\D/g, ""); //Reemplaza todo lo que no sea un digito con ""
+            const numericValue = cleanedValue ? Number(cleanedValue) : "";
+            numericValue < 1000000 ? setAmountAlert(true) : setAmountAlert(false);
+            setForm(prev => ({...prev, [name]: numericValue}));
+        }else{
+            setForm(prev => ({ ...prev, [name]: value }));
+        }
     }
 
     const handleConfirm = async (e) => {
@@ -35,7 +43,7 @@ export const RequestForm = () => {
                 {
                     montoInicial: form.montoInicial,
                     tiempo: form.tiempo,
-                    numUsuario: String(currentUser.numeroIdentificacion)
+                    numUsuario
                 }
             );
             setSolicitudData(response.data);
@@ -62,7 +70,7 @@ export const RequestForm = () => {
                 {
                     montoInicial: form.montoInicial,
                     tiempo: form.tiempo,
-                    numUsuario: String(currentUser.numeroIdentificacion)
+                    numUsuario
                 }
             );
             setSolicitudData(response.data);
@@ -89,12 +97,15 @@ export const RequestForm = () => {
             <form className="form">
                 <label htmlFor="montoInicial">Valor a invertir</label>
                 <input
-                    type="number"
+                    type="text"
                     placeholder="Ingresa el monto inicial (ej. 1000000)"
                     name="montoInicial"
                     value={form.montoInicial}
                     onChange={handleChange}
                 />
+                {amountAlert && (
+                    <small className="tiny-alert">El monto debe ser de al menos 1'000.000</small>
+                )}
 
                 <label htmlFor="tiempo">Plazo</label>
                 <select name="tiempo" value={form.tiempo} onChange={handleChange}>

@@ -54,7 +54,7 @@ export const RequestCard = ({
                 </p>
             </div>
 
-            {estado === 'enValidacion' && (
+            {(estado === 'enValidacion' || estado === 'Borrador') && (
                 <div className="request-actions">
                     <button onClick={onEdit} className="request-button edit">
                         Editar

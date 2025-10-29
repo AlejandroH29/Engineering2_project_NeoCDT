@@ -67,7 +67,7 @@ export const MyRequests = () => {
     return (
         <div className="form-container">
             <h1 className="app-title">Mis Solicitudes</h1>
-            <h2 className="page-subtitle">Usuario: {currentUser?.numUsuario}</h2>
+            <h2 className="page-subtitle">Usuario: {currentUser?.nombreCompleto}</h2>
             
             {myRequests.length === 0 ? (
                 <div className="empty-requests">
