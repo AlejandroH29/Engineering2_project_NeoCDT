@@ -9,11 +9,9 @@ export const Popup = ({ text, onSuccess, onClose, successText, closeText }) => {
             <p>{text}</p>
             {onSuccess && (
                 <FormButton onClick={onSuccess} text={successText}/>
-                // <button onClick={onSuccess}>{successText}</button>
             )}
             {onClose && (
                 <FormButton onClick={onClose} text={closeText}/>
-                // <button onClick={onClose} >{closeText}</button>
             )}
         </div>
     </div>

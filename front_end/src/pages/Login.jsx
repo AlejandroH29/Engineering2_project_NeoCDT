@@ -4,6 +4,7 @@ import { FormButton } from '../components/FormButton';
 import { AuthContext } from '../context/AuthContext';
 import axios from 'axios';
 import "../styles/form.css"
+import { Popup } from '../components/Popup';
 
 export const Login = () => {
     const {login} = useContext(AuthContext);
@@ -11,6 +12,7 @@ export const Login = () => {
     const navigate = useNavigate();
 
     const [formData, setFormData] = useState({correo: "", contrasena: ""});
+    const [wrongPasswordPopup, setWrongPasswordPopup] = useState(false);
 
     const handleChange = (e) => {
         const {name, value} = e.target;
@@ -37,7 +39,7 @@ export const Login = () => {
                     break;
             }
         } catch (err) {
-            alert(err?.response?.data?.error || "Error al ingresar")
+            err?.response?.data?.error === "Contraseña incorrecta" ? setWrongPasswordPopup(true) : console.log(err);
         }
     }
 
@@ -68,6 +70,11 @@ export const Login = () => {
                 text = "Iniciar Sesión"
                 />
             </form>
+            {wrongPasswordPopup && <Popup
+            text="Contraseña incorrecta."
+            onClose={() => setWrongPasswordPopup(false)}
+            closeText="Ok"
+            />}
         </div>
     )
 }

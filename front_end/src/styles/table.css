@@ -122,6 +122,15 @@
     background-color: #cc0000;
 }
 
+.request-button.approve {
+    background-color: #34bd18;
+    color: white;
+}
+
+.request-button.approve:hover {
+    background-color: #2b9a15;
+}
+
 .empty-requests {
     width: 600px;
     text-align: center;

@@ -2,17 +2,7 @@ import {useContext} from 'react'
 import { AuthContext } from '../context/AuthContext'
 import '../styles/table.css'
 
-export const RequestCard = ({
-    estado, 
-    monto, 
-    plazo, 
-    interes, 
-    ganancia, 
-    numero, 
-    onDelete, 
-    onEdit, 
-    onCancel
-}) => {
+export const RequestCard = ({estado, monto, plazo, interes, ganancia, numero, onDelete, onEdit, onCancel, onApprove, onReject}) => {
     const {currentUser} = useContext(AuthContext)
 
     const getStatusClass = (estado) => {
@@ -69,6 +59,17 @@ export const RequestCard = ({
                 <div className="request-actions">
                     <button onClick={onDelete} className="request-button delete">
                         Eliminar
+                    </button>
+                </div>
+            )}
+
+            {(currentUser.tipo === 'Admin' || currentUser.tipo === 'Agente') && (
+                <div className="request-actions">
+                    <button onClick={onApprove} className="request-button approve">
+                        Aprobar
+                    </button>
+                    <button onClick={onReject} className="request-button delete">
+                        Rechazar
                     </button>
                 </div>
             )}

@@ -51,7 +51,7 @@ export const RequestForm = () => {
             alert("Solicitud enviada con éxito");
             navigate("/my-requests");
         } catch (err) {
-            alert(err?.response?.data?.error || "Error al enviar la solicitud");
+            alert(err);
         }
     }
 
@@ -77,7 +77,7 @@ export const RequestForm = () => {
             alert("Solicitud guardada como borrador con éxito");
             navigate("/my-requests");
         } catch (err) {
-            alert(err?.response?.data?.error || "Error al guardar el borrador");
+            alert(err);
         }
     }
 
