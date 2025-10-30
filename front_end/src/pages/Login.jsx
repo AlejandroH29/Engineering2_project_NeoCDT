@@ -6,7 +6,7 @@ import axios from 'axios';
 import "../styles/form.css"
 
 export const Login = () => {
-    const {login, currentUser} = useContext(AuthContext);
+    const {login} = useContext(AuthContext);
 
     const navigate = useNavigate();
 
@@ -68,7 +68,6 @@ export const Login = () => {
                 text = "Iniciar Sesión"
                 />
             </form>
-            <p onClick={() => navigate("/admin")} >VISTA ADMIN</p>
         </div>
     )
 }

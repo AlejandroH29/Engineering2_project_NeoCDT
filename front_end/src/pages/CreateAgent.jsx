@@ -7,6 +7,8 @@ import axios from "axios";
 export const CreateAgent = () => {
 
     const [agentData, setAgentData] = useState({numId: 0, email: "", password: "", confirmPassword: ""});
+    const [wrongFormatPopup, setWrongFormatPopup] = useState(false);
+    const [unequalPasswordPopup, setUnequalPasswordPopup] = useState(false);
     const [cancelPopup, setCancelPopup] = useState(false);
     const [submitPopup, setSubmitPopup] = useState(false);
 
@@ -22,19 +24,19 @@ export const CreateAgent = () => {
             setCancelPopup(true);
             return;
         }
-        navigate("/dashboard");
+        navigate("/admin");
     }
 
     const handleCreateAgent = async (e) => {
         e.preventDefault();
         const passwordFormat = /^(?=.*[a-z])(?=.*[A-Z])(?=.*\d)(?=.*[\W_]).{8,}$/;
-        if (!passwordFormat.test(formData.confirmPassword)) {
-            alert("La contraseña no cumple los criterios de seguridad.");
+        if (!passwordFormat.test(agentData.confirmPassword)) {
+            setWrongFormatPopup(true);
             return;
         }
 
         if (agentData.password !== agentData.confirmPassword){
-            alert("Las contraseñas no coinciden");
+            setUnequalPasswordPopup(true);
             return;
         }
 
@@ -47,11 +49,12 @@ export const CreateAgent = () => {
             tipo: "Agente"
         }
         try{
-            await axios.post("http://localhost:3000/crearUsuario", newAgent);
+            console.log(newAgent);
+            await axios.post("http://localhost:3000/usuarios/crearUsuario", newAgent);
+            setSubmitPopup(true);
         }catch (error) {
-            alert(error?.response?.data?.error);
+            console.log(error?.response?.data?.error);
         }
-        setSubmitPopup(true);
     }
 
     return (
@@ -78,9 +81,17 @@ export const CreateAgent = () => {
                 <label htmlFor="password">Contraseña</label>
                 <input
                 type="password"
-                placeholder='Ingresa La contraseña del agente'
+                placeholder='Ingresa la contraseña del agente'
                 name='password'
                 value={agentData.password}
+                onChange={handleChange}
+                />
+                <label htmlFor="confirmPassword">Confirmar Contraseña</label>
+                <input
+                type="password"
+                placeholder='Confirma la contraseña del agente'
+                name='confirmPassword'
+                value={agentData.confirmPassword}
                 onChange={handleChange}
                 />
                 <FormButton
@@ -89,16 +100,26 @@ export const CreateAgent = () => {
                 />
                 <button onClick={handleCancel} type="button">Cancelar</button>  
             </form>
+            {wrongFormatPopup && <Popup
+            text={"La contraseña debe tener al menos 8 caracteres, incluyendo mayúsculas, minúsculas, números y símbolos especiales."}
+            onClose={() => setWrongFormatPopup(false)}
+            closeText={"Ok"}
+            />}
+            {unequalPasswordPopup && <Popup
+            text={"Las contraseñas no coinciden."}
+            onClose={() => setUnequalPasswordPopup(false)}
+            closeText={"Ok"}
+            />}
             {cancelPopup && <Popup
             text="¿Estás seguro de que quieres cancelar la creacion del agente?"
-            onSuccess={() => navigate("/dashboard")}
+            onSuccess={() => navigate("/admin")}
             onClose={() => setCancelPopup(false)}
             successText="Seguro"
             closeText="Seguir editando"
             />}
             {submitPopup && <Popup
             text={"El agente ha sido creado con éxito"}
-            onSuccess={() => navigate("/dashboard")}
+            onSuccess={() => navigate("/admin")}
             successText={"Ok"}
             />}
         </div>

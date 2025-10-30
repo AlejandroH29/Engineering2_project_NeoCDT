@@ -28,7 +28,7 @@ export const Register = () => {
             alert("Usuario creado con exito")
             navigate("/")
         } catch (err) {
-            alert(err?.response?.data?.error || "Error al registrar")
+            console.log(err?.response?.data?.error || "Error al registrar")
         }
     }
 
@@ -37,6 +37,12 @@ export const Register = () => {
             <h1 className="app-title">NeoCDT</h1>
             <h2 className="page-subtitle">Register</h2>
             <form className="form" onSubmit={handleSubmit}>
+                <label htmlFor="tipoIdentificacion">Tipo de identificacion</label>
+                <select name="tipoIdentificacion" value={formData.tipoIdentificacion} onChange={handleChange} required>
+                    <option value="CC">CC</option>
+                    <option value="CE">CE</option>
+                    <option value="Pasaporte">Pasaporte</option>
+                </select>
                 <label htmlFor="numeroIdentificacion">Numero de documento</label>
                 <input
                 type="number"
@@ -55,12 +61,6 @@ export const Register = () => {
                 onChange={handleChange}
                 required
                 />
-                <label htmlFor="tipoIdentificacion">Tipo de identificacion</label>
-                <select name="tipoIdentificacion" value={formData.tipoIdentificacion} onChange={handleChange} required>
-                    <option value="CC">CC</option>
-                    <option value="CE">CE</option>
-                    <option value="Pasaporte">Pasaporte</option>
-                </select>
                 <label htmlFor="correo">Correo electrónico</label>
                 <input
                 type="email"
