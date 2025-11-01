@@ -270,6 +270,21 @@ const crearSolicitudEnValidacion = async (solicitud) => {
     return listarSolicitudesCDTBorrador;
   }
 
+    const listarSolicitudCDTBorrador = async (numero) => {
+
+    const listarSolicitudCDTBorrador = await solicitudCDT.findOne({
+        where: {
+            numero: numero,
+            estado: "Borrador"
+        }
+    });
+
+    if (!listarSolicitudCDTBorrador || listarSolicitudCDTBorrador.length === 0){
+        throw new Error("No se encontró ninguna solicitud");
+    }
+    return listarSolicitudCDTBorrador;
+  }
+
     const listarSolicitudesEnValidacion = async (numUsuario) => {
 
     const listarSolicitudesEnValidacion = await solicitudCDT.findAll({
@@ -299,4 +314,4 @@ const crearSolicitudEnValidacion = async (solicitud) => {
     return listarSolicitudesCDTPendientesAgente;
   }
 
-export {crearSolicitudEnBorradorCDT, crearSolicitudEnValidacion, actualizarSolicitudCDT, cancelarSolicitudCDT, eliminarSolicitudCDT, listarSolicitudesCDTUsuario, listarSolicitudesCDTBorrador, listarSolicitudesEnValidacion, listarSolicitudesCDTPendientesAgente}
+export {crearSolicitudEnBorradorCDT, crearSolicitudEnValidacion, actualizarSolicitudCDT, cancelarSolicitudCDT, eliminarSolicitudCDT, listarSolicitudesCDTUsuario, listarSolicitudesCDTBorrador, listarSolicitudCDTBorrador, listarSolicitudesEnValidacion, listarSolicitudesCDTPendientesAgente}

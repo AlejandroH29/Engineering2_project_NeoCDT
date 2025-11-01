@@ -1,4 +1,4 @@
-import { crearSolicitudEnBorradorCDT, crearSolicitudEnValidacion, actualizarSolicitudCDT, cancelarSolicitudCDT ,eliminarSolicitudCDT, listarSolicitudesCDTUsuario, listarSolicitudesCDTBorrador, listarSolicitudesEnValidacion, listarSolicitudesCDTPendientesAgente } from "../Services/solicitudCDTService.js";
+import { crearSolicitudEnBorradorCDT, crearSolicitudEnValidacion, actualizarSolicitudCDT, cancelarSolicitudCDT ,eliminarSolicitudCDT, listarSolicitudesCDTUsuario, listarSolicitudesCDTBorrador, listarSolicitudCDTBorrador, listarSolicitudesEnValidacion, listarSolicitudesCDTPendientesAgente } from "../Services/solicitudCDTService.js";
 
 const crearSolicitudEnBorradorCDTController = async (req, res, next) => {
     try {
@@ -117,6 +117,16 @@ const listarSolicitudesCDTBorradorController = async (req, res, next) => {
     }
 }
 
+const listarSolicitudCDTBorradorController = async (req, res, next) => {
+    try{
+        const numero = req.params.numero;
+        const SolicitudCDTBorrador = await listarSolicitudCDTBorrador(numero);
+        res.status(200).json(SolicitudCDTBorrador);
+    }catch(err){
+        next(err)
+    }
+}
+
 const listarSolicitudesEnValidacionController = async (req, res, next) => {
     try{
         const numUsuario = req.params.numUsuario;
@@ -138,4 +148,5 @@ const listarSolicitudesCDTPendientesAgenteController = async (req, res, next) =>
 
 export {crearSolicitudEnBorradorCDTController, crearSolicitudEnValidacionController, actualizarSolicitudCDTController, 
         cancelarSolicitudCDTController, eliminarSolicitudCDTController, listarSolicitudesCDTUsuarioController, 
-        listarSolicitudesCDTBorradorController, listarSolicitudesEnValidacionController, listarSolicitudesCDTPendientesAgenteController}
+        listarSolicitudesCDTBorradorController, listarSolicitudCDTBorradorController, 
+        listarSolicitudesEnValidacionController, listarSolicitudesCDTPendientesAgenteController}
