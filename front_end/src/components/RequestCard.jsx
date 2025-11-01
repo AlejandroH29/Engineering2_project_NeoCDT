@@ -46,11 +46,16 @@ export const RequestCard = ({estado, monto, plazo, interes, ganancia, numero, on
 
             {(estado === 'enValidacion' || estado === 'Borrador') && (
                 <div className="request-actions">
-                    <button onClick={onEdit} className="request-button edit">
-                        Editar
-                    </button>
                     <button onClick={onCancel} className="request-button cancel">
                         Cancelar
+                    </button>
+                </div>
+            )}
+
+            {estado === "Borrador" && (
+                <div className="request-actions">
+                    <button onClick={onEdit} className="request-button edit">
+                        Editar
                     </button>
                 </div>
             )}

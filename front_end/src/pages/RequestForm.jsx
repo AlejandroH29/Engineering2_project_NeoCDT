@@ -1,6 +1,6 @@
-import { useState, useContext } from "react"
+import { useState, useContext, useEffect } from "react"
 import { FormButton } from "../components/FormButton";
-import { useNavigate } from "react-router-dom";
+import { useNavigate, useSearchParams } from "react-router-dom";
 import { AuthContext } from "../context/AuthContext";
 import axios from 'axios';
 import "../styles/form.css"
@@ -8,13 +8,26 @@ import "../styles/form.css"
 export const RequestForm = () => {
     const { currentUser } = useContext(AuthContext);
     const [amountAlert, setAmountAlert] = useState(false);
-    const [form, setForm] = useState({ 
-        montoInicial: "", 
-        tiempo: "3"
-    });
+    const [form, setForm] = useState({montoInicial: "", tiempo: "3"});
+
     const [showSummary, setShowSummary] = useState(false);
     const [solicitudData, setSolicitudData] = useState(null);
     const navigate = useNavigate();
+    const [searchParams] = useSearchParams();
+    const requestNumber = searchParams.get("numero")
+
+    useEffect(() => {
+        const getDraftData = async () => {
+            if (!requestNumber)return;
+            try{
+                const borrador = await axios.get(`http://localhost:3000/solicitudes/listarSolicitudBorrador/${requestNumber}`);
+                setForm(borrador.data);
+            }catch (error){
+                console.log(error);
+            }
+        }   
+        getDraftData();
+    }, [])
 
     const handleChange = (e) => {
         const { name, value } = e.target;

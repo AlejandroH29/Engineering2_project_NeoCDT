@@ -29,7 +29,7 @@ export const MyRequests = () => {
     }, [currentUser])
 
     const handleEdit = (requestNumber) => {
-        navigate("/request-form", { state: { requestNumber } });
+        navigate(`/request-form?numero=${requestNumber}`);
     }
 
     const handleCancel = async (requestNumber) => {

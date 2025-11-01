@@ -4,6 +4,7 @@ import axios from "axios";
 
 export const RequestsList = () => {
     const [pendingRequests, setPendingRequests] = useState([]);
+    const [reload, setReload] = useState(false);
 
     useEffect(() => {
         const listarSolicitudesPendientes = async () => {
@@ -15,23 +16,15 @@ export const RequestsList = () => {
             }
         }
         listarSolicitudesPendientes();
-    }, [])
+    }, [reload]);
 
-    const handleApproveRequest = async () => {
+    const handleChangeStatus = async (status, requestNumber) => {
         try{
-            await axios.delete(`http://localhost:3000/solicitudes/actualizarSolicitudCDT`, {
-                estado: "Aprobada"
+            await axios.put(`http://localhost:3000/solicitudes/actualizarSolicitudCDT`, {
+                numero: requestNumber,
+                estado: status
             });
-        }catch (error){
-            console.log(error);
-        }
-    }
-
-    const handleRejectRequest = async () => {
-        try{
-            await axios.delete(`http://localhost:3000/solicitudes/actualizarSolicitudCDT`, {
-                estado: "Rechazada"
-            });
+            setReload(!reload);
         }catch (error){
             console.log(error);
         }
@@ -64,8 +57,8 @@ export const RequestsList = () => {
                                     interes={Math.round(request.tasaInteres*100)}
                                     monto={formatCurrency(request.montoInicial)}
                                     ganancia={formatCurrency(request.montoGanancia)}
-                                    onApprove={handleApproveRequest}
-                                    onReject={handleRejectRequest}
+                                    onApprove={() => handleChangeStatus("Aprobada", request.numero)}
+                                    onReject={() => handleChangeStatus("Rechazada", request.numero)}
                                     />
                             ))}
                         </div>
