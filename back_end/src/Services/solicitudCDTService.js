@@ -22,58 +22,64 @@ import { Op } from "sequelize";
         return Math.floor(100000 + Math.random() * 900000)
     }
 
-    const crearSolicitudEnBorradorCDT = async (solicitud) =>{
+const crearSolicitudEnBorradorCDT = async (solicitud) => {
+  const normMonto = m => {
+    if (m === undefined || m === null || m === '') return 0;
+    const n = Number(m); return Number.isNaN(n) ? 0 : n;
+  };
+  const normTiempo = t => {
+    if (t === undefined || t === null || String(t).trim() === '') return null;
+    const s = String(t).trim(); return ['3','6','9','12'].includes(s) ? s : null;
+  };
 
+  const numero = (solicitud.numero && String(solicitud.numero).trim() !== '') ? Number(solicitud.numero) : null;
+  const numUsuario = (solicitud.numUsuario && String(solicitud.numUsuario).trim() !== '') ? Number(solicitud.numUsuario) : null;
 
-        let numeroAleatorio;
-        let existe = true;  
-        while (existe) {
-            numeroAleatorio = generarNumeroSolicitudAleatorio();
-            const solicitudPorNumero = await solicitudCDT.findOne({
-                where: {numero: numeroAleatorio}
-            })
-            existe = !!solicitudPorNumero;
-        }
-        solicitud.numero = numeroAleatorio;
+  // Si se envía numero -> actualizar esa solicitud (si existe)
+  if (numero) {
+    const existente = await solicitudCDT.findOne({ where: { numero } });
 
-        solicitud.estado = "Borrador";
+    const tieneMonto = Object.prototype.hasOwnProperty.call(solicitud, 'montoInicial');
+    const tieneTiempo = Object.prototype.hasOwnProperty.call(solicitud, 'tiempo');
 
-        let montoInicial = solicitud.montoInicial;
+    const montoInicial = tieneMonto ? normMonto(solicitud.montoInicial) : existente.montoInicial;
+    const tiempo = tieneTiempo ? normTiempo(solicitud.tiempo) : existente.tiempo;
 
-        if (montoInicial === undefined || montoInicial === null || montoInicial === '') {
-            montoInicial = 0;
-        } else {
-            montoInicial = Number(montoInicial);
-            if (Number.isNaN(montoInicial)) montoInicial = 0;
-        }
-        solicitud.montoInicial = montoInicial;
+    const tasa = calcularInteresCDT(tiempo ? Number(tiempo) : 0);
+    const montoGanancia = Math.trunc(calcularGananciaCDT(montoInicial, tasa));
 
-          // Normalizar tiempo: si viene vacío => null (compatible con ENUM), si viene validar que sea "3","6","9" o "12"
-        let tiempo = solicitud.tiempo;
-        const valoresPermitidos = ["3","6","9","12"];
-        if (tiempo === undefined || tiempo === null || String(tiempo).trim() === '') {
-            tiempo = null;
-        } else {
-            const tiempoStr = String(tiempo).trim();
-            if (!valoresPermitidos.includes(tiempoStr)) {
-                // no es un valor válido del ENUM, lo tratamos como vacío
-                tiempo = null;
-            } else {
-                // almacenar como string para coincidir con el ENUM en la DB
-                tiempo = tiempoStr;
-            }
-        }
-        solicitud.tiempo = tiempo;
+    const toUpdate = { montoInicial, tiempo, tasaInteres: tasa, montoGanancia };
+    if (numUsuario) toUpdate.numUsuario = numUsuario;
 
-        // calcular interés usando número de meses (0 si tiempo es null)
-        const tasaEfectiva = calcularInteresCDT(tiempo ? Number(tiempo) : 0);
-        const montoFinal = calcularGananciaCDT(solicitud.montoInicial, tasaEfectiva);
-        solicitud.tasaInteres = tasaEfectiva;
-        solicitud.montoGanancia = Math.trunc(montoFinal);
+    await existente.update(toUpdate);
+    return await existente.reload();
+  }
 
-        const nuevaSolicitud = await solicitudCDT.create(solicitud);
-        return nuevaSolicitud;
-    }
+  // Si no se envía numero -> crear nueva solicitud
+  let numeroAleatorio;
+  do {
+    numeroAleatorio = generarNumeroSolicitudAleatorio();
+  } while (await solicitudCDT.findOne({ where: { numero: numeroAleatorio } }));
+
+  const montoInicial = normMonto(solicitud.montoInicial);
+  const tiempo = normTiempo(solicitud.tiempo);
+  const tasa = calcularInteresCDT(tiempo ? Number(tiempo) : 0);
+  const montoGanancia = Math.trunc(calcularGananciaCDT(montoInicial, tasa));
+
+  const nueva = {
+    ...solicitud,
+    numero: numeroAleatorio,
+    estado: 'Borrador',
+    numUsuario: numUsuario ?? solicitud.numUsuario,
+    montoInicial,
+    tiempo,
+    tasaInteres: tasa,
+    montoGanancia
+  };
+
+  return await solicitudCDT.create(nueva);
+};
+
 
 const crearSolicitudEnValidacion = async (solicitud) => {
         // intentar encontrar por número si viene

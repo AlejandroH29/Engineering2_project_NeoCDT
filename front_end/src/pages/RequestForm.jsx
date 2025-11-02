@@ -56,7 +56,8 @@ export const RequestForm = () => {
                 {
                     montoInicial: form.montoInicial,
                     tiempo: form.tiempo,
-                    numUsuario
+                    numUsuario,
+                    ...(form.numero ? { numero: form.numero } : {})
                 }
             );
             setSolicitudData(response.data);
@@ -83,7 +84,8 @@ export const RequestForm = () => {
                 {
                     montoInicial: form.montoInicial,
                     tiempo: form.tiempo,
-                    numUsuario
+                    numUsuario,
+                    ...(form.numero ? { numero: form.numero } : {})
                 }
             );
             setSolicitudData(response.data);
