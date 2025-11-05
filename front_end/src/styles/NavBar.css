@@ -12,6 +12,14 @@
     z-index: 1000;
 }
 
+/* Asegura que el contenido siguiente a la barra fija no quede oculto
+   por la navbar. Se aplica padding-top al siguiente elemento hermano
+   directo cuando la navbar está presente. Ajustar si la altura de la
+   navbar cambia. */
+.navbar + * {
+    padding-top: 64px; /* espacio suficiente para la navbar fija */
+}
+
 .arrowBack,
 .logOutIcon {
     font-size: 1.8rem;

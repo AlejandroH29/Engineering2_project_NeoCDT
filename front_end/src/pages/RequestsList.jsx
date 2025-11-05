@@ -84,7 +84,7 @@ export const RequestsList = () => {
             <div>
                 {pendingRequests.length === 0 ? (
                     <div className="empty-requests">
-                        <h3 className="text-xl text-gray-600">No hay solicitudes por resivar</h3>
+                        <h3 className="text-xl text-gray-600">No hay solicitudes por revisar</h3>
                     </div>
                 ) : (
                     <div className="requests-container">
