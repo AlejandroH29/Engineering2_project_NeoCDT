@@ -6,7 +6,7 @@ import axios from "axios";
 
 export const CreateAgent = () => {
 
-    const [agentData, setAgentData] = useState({numId: 0, email: "", password: "", confirmPassword: ""});
+    const [agentData, setAgentData] = useState({numId: "", email: "", password: "", confirmPassword: ""});
     const [wrongFormatPopup, setWrongFormatPopup] = useState(false);
     const [unequalPasswordPopup, setUnequalPasswordPopup] = useState(false);
     const [cancelPopup, setCancelPopup] = useState(false);
@@ -64,7 +64,7 @@ export const CreateAgent = () => {
             <form className="form">
                 <label htmlFor="email">Número de documento</label>
                 <input
-                type="number"
+                type="text"
                 placeholder='Número de docuemnto del agente'
                 name='numId'
                 value={agentData.numId}
