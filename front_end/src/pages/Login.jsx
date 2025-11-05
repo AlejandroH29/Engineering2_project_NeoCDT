@@ -13,6 +13,8 @@ export const Login = () => {
 
     const [formData, setFormData] = useState({correo: "", contrasena: ""});
     const [wrongPasswordPopup, setWrongPasswordPopup] = useState(false);
+    const [correctLoginPopup, setCorrectLoginPopup] = useState(false)
+    const [userType, setUserType] = useState(null);
 
     const handleChange = (e) => {
         const {name, value} = e.target;
@@ -24,20 +26,9 @@ export const Login = () => {
         try {
             const response = await axios.post("http://localhost:3000/usuarios/validarSesion", formData);
             const userData = response.data;
-            alert("Sesion iniciada");
             login(userData);
-            
-            switch (userData.tipo) {
-                case "Agente":
-                    navigate("/agent");
-                    break;
-                case "Admin":
-                    navigate("/admin");
-                    break;
-                case "Cliente":
-                    navigate("/client");
-                    break;
-            }
+            setUserType(userData.tipo);
+            setCorrectLoginPopup(true);
         } catch (err) {
             err?.response?.data?.error === "Contraseña incorrecta" ? setWrongPasswordPopup(true) : console.log(err);
         }
@@ -75,6 +66,29 @@ export const Login = () => {
             onClose={() => setWrongPasswordPopup(false)}
             closeText="Ok"
             />}
+            {correctLoginPopup && (
+            <Popup
+                text={"Inicio de sesión correcto."}
+                onSuccess={() => {
+                    // cerrar popup
+                    setCorrectLoginPopup(false);
+                    switch (userType) {
+                        case "Agente":
+                            navigate("/agent");
+                            break;
+                        case "Admin":
+                            navigate("/admin");
+                            break;
+                        case "Cliente":
+                            navigate("/client");
+                            break;
+                        default:
+                            navigate("/");
+                    }
+                }}
+                successText={"Ok"}
+            />
+            )}
         </div>
     )
 }
