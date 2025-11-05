@@ -98,9 +98,7 @@ test("Inicio de sesion", async ({page}) =>{
 
     const botonInicioSesion = page.getByText("Iniciar Sesión");
     await expect(botonInicioSesion).toBeVisible();
-    page.on('request', req => {
-        console.log('➡️ Petición:', req.url());
-    });
+    
     await page.route("**/usuarios/validarSesion", async (route) =>{
         const req = route.request();
         expect(req.method()).toBe("POST");
