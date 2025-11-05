@@ -87,7 +87,6 @@ export const Register = () => {
                     ¿Ya tienes una cuenta?{" "}
                     <a onClick={() => navigate("/")}>Login</a>
                 </p>
-                <p onClick={() => navigate("/create-agent")} >CREAR AGENTE</p> {/*  QUITAR CUANDO ESTÉ LISTO */}
             </form>
         </div>
     )
