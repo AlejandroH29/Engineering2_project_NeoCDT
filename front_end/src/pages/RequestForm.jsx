@@ -1,9 +1,10 @@
-import { useState, useContext, useEffect } from "react"
+import { useState, useContext, useEffect, useRef } from "react"
 import { FormButton } from "../components/FormButton";
 import { useNavigate, useSearchParams } from "react-router-dom";
 import { AuthContext } from "../context/AuthContext";
 import axios from 'axios';
 import "../styles/form.css"
+import { Popup } from '../components/Popup';
 
 export const RequestForm = () => {
     const { currentUser } = useContext(AuthContext);
@@ -12,6 +13,10 @@ export const RequestForm = () => {
 
     const [showSummary, setShowSummary] = useState(false);
     const [solicitudData, setSolicitudData] = useState(null);
+    const [showSuccessPopup, setShowSuccessPopup] = useState(false);
+    const successModeRef = useRef(""); // 'enviado' | 'borrador'
+    const [showErrorPopup, setShowErrorPopup] = useState(false);
+    const errorTypeRef = useRef(""); // 'unauth' | 'generic'
     const navigate = useNavigate();
     const [searchParams] = useSearchParams();
     const requestNumber = searchParams.get("numero")
@@ -44,8 +49,8 @@ export const RequestForm = () => {
     const handleConfirm = async (e) => {
         e.preventDefault();
         if (!currentUser?.numeroIdentificacion) {
-            alert("Error: Usuario no autenticado");
-            navigate("/");
+            errorTypeRef.current = "unauth";
+            setShowErrorPopup(true);
             return;
         }
         try {
@@ -62,18 +67,20 @@ export const RequestForm = () => {
             );
             setSolicitudData(response.data);
             setShowSummary(true);
-            alert("Solicitud enviada con éxito");
-            navigate("/my-requests");
+            successModeRef.current = "enviado";
+            setShowSuccessPopup(true);
         } catch (err) {
-            alert(err);
+            console.error(err);
+            errorTypeRef.current = "generic";
+            setShowErrorPopup(true);
         }
     }
 
     const handleDraft = async (e) =>{
         e.preventDefault();
         if (!currentUser?.numeroIdentificacion) {
-            alert("Error: Usuario no autenticado");
-            navigate("/");
+            errorTypeRef.current = "unauth";
+            setShowErrorPopup(true);
             return;
         }
         try {
@@ -89,10 +96,12 @@ export const RequestForm = () => {
                 }
             );
             setSolicitudData(response.data);
-            alert("Solicitud guardada como borrador con éxito");
-            navigate("/my-requests");
+            successModeRef.current = "borrador";
+            setShowSuccessPopup(true);
         } catch (err) {
-            alert(err);
+            console.error(err);
+            errorTypeRef.current = "generic";
+            setShowErrorPopup(true);
         }
     }
 
@@ -132,8 +141,32 @@ export const RequestForm = () => {
 
                 <FormButton text={"Enviar"} onClick={handleConfirm}/>
                 <FormButton text={"Borrador"} onClick={handleDraft}/>
-                <button onClick={handleCancel} type="button">Cancelar</button>
+                <FormButton text={"Cancelar"} onClick={handleCancel}/>
             </form>
+                {showSuccessPopup && (
+                    <Popup
+                        text={successModeRef.current === "enviado" ? "Solicitud enviada con éxito" : "Solicitud guardada como borrador con éxito"}
+                        onSuccess={() => {
+                            setShowSuccessPopup(false);
+                            navigate("/my-requests");
+                        }}
+                        successText={"Ok"}
+                    />
+                )}
+
+                {showErrorPopup && (
+                    <Popup
+                        text={errorTypeRef.current === "unauth" ? "Error: Usuario no autenticado" : "Ocurrió un error al procesar la solicitud"}
+                        onClose={() => {
+                            setShowErrorPopup(false);
+                            // si es por usuario no autenticado, redirigir al inicio
+                            if (errorTypeRef.current === "unauth") {
+                                navigate("/");
+                            }
+                        }}
+                        closeText={"Ok"}
+                    />
+                )}
         </div>
     )
 }

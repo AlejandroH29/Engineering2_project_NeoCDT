@@ -1,8 +1,9 @@
-import {useContext, useEffect, useState} from 'react'
+import {useContext, useEffect, useState, useRef} from 'react'
 import { AuthContext } from '../context/AuthContext'
 import { useNavigate } from 'react-router-dom'
 import axios from 'axios'
 import { RequestCard } from '../components/RequestCard'
+import { Popup } from '../components/Popup'
 import "../styles/form.css"
 import "../styles/table.css"
 
@@ -10,6 +11,13 @@ export const MyRequests = () => {
     const navigate = useNavigate();
     const {currentUser} = useContext(AuthContext)
     const [myRequests, setMyRequests] = useState([]);
+    const [showConfirmCancelPopup, setShowConfirmCancelPopup] = useState(false);
+    const [showConfirmDeletePopup, setShowConfirmDeletePopup] = useState(false);
+    const [showSuccessPopup, setShowSuccessPopup] = useState(false);
+    const [showErrorPopup, setShowErrorPopup] = useState(false);
+    const actionTargetRef = useRef(null); // request number being acted on
+    const successModeRef = useRef(""); // 'cancel' | 'delete'
+    const errorModeRef = useRef(""); // 'cancel' | 'delete' | 'load'
 
     const fetchRequests = async () => {
         if (!currentUser?.numeroIdentificacion) return;
@@ -32,27 +40,41 @@ export const MyRequests = () => {
         navigate(`/request-form?numero=${requestNumber}`);
     }
 
-    const handleCancel = async (requestNumber) => {
-        if (!window.confirm("¿Estás seguro de cancelar esta solicitud?")) return;
-        
+    const handleCancel = (requestNumber) => {
+        actionTargetRef.current = requestNumber;
+        setShowConfirmCancelPopup(true);
+    }
+
+    const performCancel = async (requestNumber) => {
+        setShowConfirmCancelPopup(false);
         try {
             await axios.put(`http://localhost:3000/solicitudes/cancelarSolicitudCDT/${requestNumber}`);
-            alert("Solicitud cancelada exitosamente");
+            successModeRef.current = 'cancel';
+            setShowSuccessPopup(true);
             fetchRequests();
         } catch (error) {
-            alert(error?.response?.data?.error || "Error al cancelar la solicitud");
+            console.error(error);
+            errorModeRef.current = 'cancel';
+            setShowErrorPopup(true);
         }
     }
 
-    const handleDelete = async (requestNumber) => {
-        if (!window.confirm("¿Estás seguro de eliminar esta solicitud?")) return;
-        
+    const handleDelete = (requestNumber) => {
+        actionTargetRef.current = requestNumber;
+        setShowConfirmDeletePopup(true);
+    }
+
+    const performDelete = async (requestNumber) => {
+        setShowConfirmDeletePopup(false);
         try {
             await axios.delete(`http://localhost:3000/solicitudes/eliminarSolicitudCDT/${requestNumber}`);
-            alert("Solicitud eliminada exitosamente");
+            successModeRef.current = 'delete';
+            setShowSuccessPopup(true);
             fetchRequests();
         } catch (error) {
-            alert(error?.response?.data?.error || "Error al eliminar la solicitud");
+            console.error(error);
+            errorModeRef.current = 'delete';
+            setShowErrorPopup(true);
         }
     }
 
@@ -92,6 +114,45 @@ export const MyRequests = () => {
                         ))}
                     </div>
                 </div>
+            )}
+            {/* Confirm cancel popup */}
+            {showConfirmCancelPopup && (
+                <Popup
+                    text={"¿Estás seguro de cancelar esta solicitud?"}
+                    onSuccess={() => performCancel(actionTargetRef.current)}
+                    onClose={() => setShowConfirmCancelPopup(false)}
+                    successText={"Sí"}
+                    closeText={"No"}
+                />
+            )}
+
+            {/* Confirm delete popup */}
+            {showConfirmDeletePopup && (
+                <Popup
+                    text={"¿Estás seguro de eliminar esta solicitud?"}
+                    onSuccess={() => performDelete(actionTargetRef.current)}
+                    onClose={() => setShowConfirmDeletePopup(false)}
+                    successText={"Sí"}
+                    closeText={"No"}
+                />
+            )}
+
+            {/* Success popup */}
+            {showSuccessPopup && (
+                <Popup
+                    text={successModeRef.current === 'cancel' ? "Solicitud cancelada exitosamente" : "Solicitud eliminada exitosamente"}
+                    onSuccess={() => setShowSuccessPopup(false)}
+                    successText={"Ok"}
+                />
+            )}
+
+            {/* Error popup */}
+            {showErrorPopup && (
+                <Popup
+                    text={errorModeRef.current === 'cancel' ? "Error al cancelar la solicitud" : (errorModeRef.current === 'delete' ? "Error al eliminar la solicitud" : "Error al cargar las solicitudes")}
+                    onClose={() => setShowErrorPopup(false)}
+                    closeText={"Ok"}
+                />
             )}
         </div>
     )
