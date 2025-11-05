@@ -1,5 +1,7 @@
 import { test, expect, selectors } from '@playwright/test'
 
+test.describe.configure({ mode: 'serial' });
+
 test("Verificacion de contenido pagina inicial", async ({ page })=>{
     await page.goto("http://localhost:5173/");
     const locatorLabel = page.locator('label[for="correo"]');
@@ -13,9 +15,6 @@ test("Verificacion de contenido pagina inicial", async ({ page })=>{
 });
 
 test("Registro de cuenta", async ({ page })=>{
-    page.on("response", res => {
-        console.log("📡", res.request().method(), res.url(), "→", res.status());
-    });
 
     await page.goto("http://localhost:5173/");
     const linkRegistro = page.getByText("Register");
@@ -65,43 +64,43 @@ test("Registro de cuenta", async ({ page })=>{
         route.continue();
     });
     //const alertaRegistro = page.waitForEvent("dialog");
-    const [response] = await Promise.all([
-        page.waitForResponse(res => res.url().includes("/usuarios/crearUsuario") && res.status() === 201),
+    const [response, dialog] = await Promise.all([
+        page.waitForResponse((res) => res.url().includes("/usuarios/crearUsuario") && res.status() === 201),
+        page.waitForEvent("dialog"),
         botonRegistrar.click(),
     ]);
-    const popupCreacionU = page.locator(".popup-overlay");
-    await expect(popupCreacionU).toBeVisible({ timeout: 10000 });
-    const textoPopup = page.locator(".popup-overlay p");
-    await expect(textoPopup).toHaveText("Usuario creado con exito");
+    //const popupCreacionU = page.locator(".popup-overlay");
+    //await expect(popupCreacionU).toBeVisible({ timeout: 10000 });
+    //const textoPopup = page.locator(".popup-overlay p");
+    //await expect(textoPopup).toHaveText("Usuario creado con exito");
 
-    const botonPopup = page.getByRole("button", {name: "Aceptar"});
-    await botonPopup.click();
-    await expect(popupCreacionU).toBeHidden();
+    //const botonPopup = page.getByRole("button", {name: "Aceptar"});
+    //await botonPopup.click();
+    //await expect(popupCreacionU).toBeHidden();
     //const dialog = await alertaRegistro;
-    //expect(dialog.message()).toBe("Usuario creado con exito");
-    //await dialog.accept();
+    expect(dialog.message()).toContain("Usuario creado con exito");
+    await dialog.accept();
     await expect(page).toHaveURL("http://localhost:5173/");
 });
 
 test("Inicio de sesion", async ({page}) =>{
-    page.on("response", res => {
-        console.log("📡", res.request().method(), res.url(), "→", res.status());
-    });
 
     await page.goto("http://localhost:5173/");
     const inputCorreo = page.locator('input[name="correo"]');
     await expect(inputCorreo).toBeVisible();
-    await inputCorreo.type("ejemplo@gmail.com");
+    await inputCorreo.fill("ejemplo@gmail.com");
     await expect(inputCorreo).toHaveValue("ejemplo@gmail.com");
 
     const inputContraseña = page.locator('input[name="contrasena"]');
     await expect(inputContraseña).toBeVisible();
-    await inputContraseña.type("Diego1234.");
+    await inputContraseña.fill("Diego1234.");
     await expect(inputContraseña).toHaveValue("Diego1234.");
 
     const botonInicioSesion = page.getByText("Iniciar Sesión");
     await expect(botonInicioSesion).toBeVisible();
-
+    page.on('request', req => {
+        console.log('➡️ Petición:', req.url());
+    });
     await page.route("**/usuarios/validarSesion", async (route) =>{
         const req = route.request();
         expect(req.method()).toBe("POST");
@@ -113,20 +112,21 @@ test("Inicio de sesion", async ({page}) =>{
         route.continue();   
     })
     //const alertaInicioSesion = page.waitForEvent("dialog");
-    const [response] = await Promise.all([
-        page.waitForResponse(res => res.url().includes("/usuarios/validarSesion") && res.status() === 201),
+    const [response, dialog] = await Promise.all([
+        page.waitForResponse((res) => res.url().includes("/usuarios/validarSesion") && res.status() === 201),
+        page.waitForEvent("dialog"),
         botonInicioSesion.click(),
     ]);
-    const popupInicioS = page.locator(".popup-overlay");
-    await expect(popupInicioS).toBeVisible({ timeout: 10000 });
-    const textoPopup = page.locator(".popup-overlay p");
-    await expect(textoPopup).toHaveText("Sesion iniciada");
+    //const popupInicioS = page.locator(".popup-overlay");
+    //await expect(popupInicioS).toBeVisible({ timeout: 10000 });
+    //const textoPopup = page.locator(".popup-overlay p");
+    //await expect(textoPopup).toHaveText("Sesion iniciada");
 
-    const botonPopup = page.getByRole("button", {name: "Aceptar"});
-    await botonPopup.click();
-    await expect(popupInicioS).toBeHidden();
+    //const botonPopup = page.getByRole("button", {name: "Aceptar"});
+    //await botonPopup.click();
+    //await expect(popupInicioS).toBeHidden();
     //const dialog = await alertaInicioSesion;
-    //expect(dialog.message()).toEqual("Sesion iniciada");
-    //await dialog.accept();
+    expect(dialog.message()).toContain("Sesion iniciada");
+    await dialog.accept();
     await expect(page).toHaveURL(/client/);
 });
