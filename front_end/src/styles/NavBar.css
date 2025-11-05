@@ -33,14 +33,16 @@
     display: flex;
     gap: 1.5rem;
     font-size: 1rem;
+    align-items: center;
 }
 
-.nav-items p {
-    cursor: pointer;
-    transition: color 0.2s ease, transform 0.2s ease;
+.home{
+    font-size: 1.5rem;
 }
 
-.nav-items p:hover {
+.nav-items *:hover {
     color: #fff;
     transform: translateY(-2px);
+    cursor: pointer;
+    transition: color 0.2s ease, transform 0.2s ease;
 }
