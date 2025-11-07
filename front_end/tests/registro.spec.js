@@ -189,9 +189,9 @@ test("Registro de cuenta con correo ya existente", async ({page})=>{
     const textoPopup = page.locator(".popup-overlay p");
     await expect(textoPopup).toHaveText("El correo de usuario ya esta en uso");
 
-    const botonPopup = page.getByRole("button", {name: "Ok"});
+    const botonPopup = page.getByText("Ok");
     await botonPopup.click();
-    await expect(popupInicioS).toBeHidden();
+    await expect(popupCorreoRepetido).toBeHidden();
     await expect(page).toHaveURL(/register/);
 });
 
@@ -231,11 +231,11 @@ test("Inicio de sesion con contraseña incorrecta", async ({page}) =>{
     const textoPopup = page.locator(".popup-overlay p");
     await expect(textoPopup).toHaveText("Contraseña incorrecta");
 
-    const botonPopup = page.getByRole("button", {name: "Ok"});
+    const botonPopup = page.getByText("Ok");
     await botonPopup.click();
-    await expect(popupInicioS).toBeHidden();
+    await expect(popupInicioSIncorrecto).toBeHidden();
 
     //const dialog = await alertaInicioSesion;
-    await expect(page).toHaveURL("htttp:/localhost:5137/");
+    await expect(page).toHaveURL("http://localhost:5173/");
 });
 
