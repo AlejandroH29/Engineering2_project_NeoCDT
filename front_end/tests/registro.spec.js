@@ -163,6 +163,7 @@ test("Registro de cuenta con correo ya existente", async ({page})=>{
     await expect(inputContraseña).toHaveValue("Diego1234.");
 
     const botonRegistrar = page.getByText("Registrarse");
+    await expect(botonRegistrar).toBeVisible();
     await page.route("**/usuarios/crearUsuario", async (route)=>{
         const req = route.request();
         expect(req.method()).toBe("POST");
@@ -183,13 +184,12 @@ test("Registro de cuenta con correo ya existente", async ({page})=>{
         botonRegistrar.click()
     ])
 
-    await expect(botonRegistrar).toBeVisible();
     const popupCorreoRepetido = page.locator(".popup-overlay");
     await expect(popupCorreoRepetido).toBeVisible({ timeout: 10000 });
     const textoPopup = page.locator(".popup-overlay p");
     await expect(textoPopup).toHaveText("El correo de usuario ya esta en uso");
 
-    const botonPopup = page.getByRole("button", {name: "Aceptar"});
+    const botonPopup = page.getByRole("button", {name: "Ok"});
     await botonPopup.click();
     await expect(popupInicioS).toBeHidden();
     await expect(page).toHaveURL(/register/);
@@ -205,8 +205,8 @@ test("Inicio de sesion con contraseña incorrecta", async ({page}) =>{
 
     const inputContraseña = page.locator('input[name="contrasena"]');
     await expect(inputContraseña).toBeVisible();
-    await inputContraseña.fill("Diego1234.");
-    await expect(inputContraseña).toHaveValue("Diego1234.");
+    await inputContraseña.fill("Diego12345.");
+    await expect(inputContraseña).toHaveValue("Diego12345.");
 
     const botonInicioSesion = page.getByText("Iniciar Sesión");
     await expect(botonInicioSesion).toBeVisible();
@@ -217,7 +217,7 @@ test("Inicio de sesion con contraseña incorrecta", async ({page}) =>{
         const body = req.postDataJSON();
         expect(body).toMatchObject({
             "correo": "ejemplo@gmail.com",
-            "contrasena": "Diego1234."
+            "contrasena": "Diego12345."
         })
         route.continue();   
     })
@@ -231,7 +231,7 @@ test("Inicio de sesion con contraseña incorrecta", async ({page}) =>{
     const textoPopup = page.locator(".popup-overlay p");
     await expect(textoPopup).toHaveText("Contraseña incorrecta");
 
-    const botonPopup = page.getByRole("button", {name: "Aceptar"});
+    const botonPopup = page.getByRole("button", {name: "Ok"});
     await botonPopup.click();
     await expect(popupInicioS).toBeHidden();
 
