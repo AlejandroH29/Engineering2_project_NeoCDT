@@ -8,7 +8,7 @@ const crearUsuario = async (usuario) =>{
         throw new Error("El correo de usuario ya esta en uso");
     }
     const idLenght = /^[0-9]{8,10}$/;
-    if(!idLenght.test(usuario.numeroIdentificacion)){
+    if(!idLenght.test(usuario.numeroIdentificacion.toString())){
         throw new Error("El numero de identificacion debe tener entre 8 y 10 digitos");
     }
     const nuevoUsuario = await Usuario.create(usuario);
