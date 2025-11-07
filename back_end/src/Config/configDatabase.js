@@ -1,5 +1,5 @@
 import { Sequelize } from "sequelize";
-const sequelize = new Sequelize("BDProyectoIngesoft2","root","root",{ //Aqui se debe de configurar dependiendo del dispositivo
+const sequelize = new Sequelize("BDProyectoIngesoft2","root","1002",{ //Aqui se debe de configurar dependiendo del dispositivo
     host: "localhost",
     dialect: "mysql"
 });

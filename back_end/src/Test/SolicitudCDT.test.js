@@ -1,9 +1,10 @@
 import { solicitudCDT } from "../Models/solicitudCDTModel.js";
-import { crearSolicitudEnBorradorCDT, crearSolicitudEnValidacion, actualizarSolicitudCDT, cancelarSolicitudCDT, eliminarSolicitudCDT } from "../Services/solicitudCDTService.js";
+import { crearSolicitudEnBorradorCDT, crearSolicitudEnValidacion, actualizarSolicitudCDT, cancelarSolicitudCDT, eliminarSolicitudCDT, listarSolicitudesCDTUsuario, listarSolicitudCDTBorrador, listarSolicitudesCDTPendientesAgente } from "../Services/solicitudCDTService.js";
 
 jest.mock("../Models/solicitudCDTModel.js", () => ({
     solicitudCDT: {
         findOne: jest.fn(),
+        findAll: jest.fn(),
         create: jest.fn()
     }
 }));
@@ -262,4 +263,74 @@ describe("SolicitudCDTService - crearSolicitudEnValidacion", () => {
         });
     });
 
+    describe("listarSolicitudesCDTUsuario", () => {
+    beforeEach(() => {
+        jest.clearAllMocks();
+    });
+
+    test("devuelve todas las solicitudes del usuario (numUsuario)", async () => {
+        const mockData = [
+        { numero: "100", numUsuario: "1234", estado: "Borrador" },
+        { numero: "101", numUsuario: "1234", estado: "enValidacion" }
+        ];
+        solicitudCDT.findAll.mockResolvedValue(mockData);
+
+        const result = await listarSolicitudesCDTUsuario("1234");
+
+        expect(solicitudCDT.findAll).toHaveBeenCalledWith({ where: { numUsuario: "1234" } });
+        expect(Array.isArray(result)).toBe(true);
+        expect(result).toEqual(mockData);
+    });
+
+    test("lanza error cuando no hay solicitudes para el usuario", async () => {
+        solicitudCDT.findAll.mockResolvedValue([]);
+        await expect(listarSolicitudesCDTUsuario("1234")).rejects.toThrow("No se encontraron solicitudes");
+    });
+    });
+
+    describe("listarSolicitudCDTBorrador", () => {
+    beforeEach(() => {
+        jest.clearAllMocks();
+    });
+
+    test("devuelve la solicitud en estado Borrador por numero", async () => {
+        const mockSolicitud = { numero: "212666", estado: "Borrador", numUsuario: "98323064" };
+        solicitudCDT.findOne.mockResolvedValue(mockSolicitud);
+
+        const result = await listarSolicitudCDTBorrador("212666");
+
+        expect(solicitudCDT.findOne).toHaveBeenCalledWith({ where: { numero: "212666", estado: "Borrador" } });
+        expect(result).toEqual(mockSolicitud);
+    });
+
+    test("lanza error cuando no existe la solicitud borrador", async () => {
+        solicitudCDT.findOne.mockResolvedValue(null);
+        await expect(listarSolicitudCDTBorrador("999999")).rejects.toThrow("No se encontró ninguna solicitud");
+    });
+
+    });
+
+    describe("listarSolicitudesCDTPendientesAgente", () => {
+    beforeEach(() => {
+        jest.clearAllMocks();
+    });
+
+    test("devuelve solicitudes pendientes (enValidacion) para el agente", async () => {
+        const mockPendientes = [
+        { numero: "201", estado: "enValidacion" }
+        ];
+        solicitudCDT.findAll.mockResolvedValue(mockPendientes);
+
+        const result = await listarSolicitudesCDTPendientesAgente();
+
+        expect(solicitudCDT.findAll).toHaveBeenCalled();
+        expect(result).toEqual(mockPendientes);
+    });
+
+    test("lanza error cuando no hay solicitudes pendientes", async () => {
+        solicitudCDT.findAll.mockResolvedValue([]);
+        await expect(listarSolicitudesCDTPendientesAgente()).rejects.toThrow("No se encontraron ningunas solicitudes pendientes");
+    });
+
+    });
 });

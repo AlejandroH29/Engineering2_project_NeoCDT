@@ -1,4 +1,4 @@
-import { crearSolicitudEnBorradorCDT, crearSolicitudEnValidacion, actualizarSolicitudCDT, cancelarSolicitudCDT ,eliminarSolicitudCDT, listarSolicitudesCDTUsuario, listarSolicitudesCDTBorrador, listarSolicitudCDTBorrador, listarSolicitudesEnValidacion, listarSolicitudesCDTPendientesAgente } from "../Services/solicitudCDTService.js";
+import { crearSolicitudEnBorradorCDT, crearSolicitudEnValidacion, actualizarSolicitudCDT, cancelarSolicitudCDT ,eliminarSolicitudCDT, listarSolicitudesCDTUsuario, listarSolicitudCDTBorrador, listarSolicitudesCDTPendientesAgente } from "../Services/solicitudCDTService.js";
 
 const crearSolicitudEnBorradorCDTController = async (req, res, next) => {
     try {
@@ -97,31 +97,11 @@ const listarSolicitudesCDTUsuarioController = async (req, res, next) => {
     }
 }
 
-const listarSolicitudesCDTBorradorController = async (req, res, next) => {
-    try{
-        const numUsuario = req.params.numUsuario;
-        const listadoSolicitudesBorrador = await listarSolicitudesCDTBorrador(numUsuario);
-        res.status(200).json(listadoSolicitudesBorrador);
-    }catch(err){
-        next(err)
-    }
-}
-
 const listarSolicitudCDTBorradorController = async (req, res, next) => {
     try{
         const numero = req.params.numero;
         const SolicitudCDTBorrador = await listarSolicitudCDTBorrador(numero);
         res.status(200).json(SolicitudCDTBorrador);
-    }catch(err){
-        next(err)
-    }
-}
-
-const listarSolicitudesEnValidacionController = async (req, res, next) => {
-    try{
-        const numUsuario = req.params.numUsuario;
-        const listadoSolicitudesEnValidacion = await listarSolicitudesEnValidacion(numUsuario);
-        res.status(200).json(listadoSolicitudesEnValidacion);
     }catch(err){
         next(err)
     }
@@ -138,5 +118,4 @@ const listarSolicitudesCDTPendientesAgenteController = async (req, res, next) =>
 
 export {crearSolicitudEnBorradorCDTController, crearSolicitudEnValidacionController, actualizarSolicitudCDTController, 
         cancelarSolicitudCDTController, eliminarSolicitudCDTController, listarSolicitudesCDTUsuarioController, 
-        listarSolicitudesCDTBorradorController, listarSolicitudCDTBorradorController, 
-        listarSolicitudesEnValidacionController, listarSolicitudesCDTPendientesAgenteController}
+        listarSolicitudCDTBorradorController, listarSolicitudesCDTPendientesAgenteController}

@@ -261,21 +261,6 @@ const crearSolicitudEnValidacion = async (solicitud) => {
     return solicitudesPorUsuario;
   }
 
-  const listarSolicitudesCDTBorrador = async (numUsuario) => {
-
-    const listarSolicitudesCDTBorrador = await solicitudCDT.findAll({
-        where: {
-            numUsuario: numUsuario,
-            estado: "Borrador"
-        }
-    });
-
-    if (!listarSolicitudesCDTBorrador || listarSolicitudesCDTBorrador.length === 0){
-        throw new Error("No se encontraron ningunas solicitudes en borrador");
-    }
-    return listarSolicitudesCDTBorrador;
-  }
-
     const listarSolicitudCDTBorrador = async (numero) => {
 
     const listarSolicitudCDTBorrador = await solicitudCDT.findOne({
@@ -289,21 +274,6 @@ const crearSolicitudEnValidacion = async (solicitud) => {
         throw new Error("No se encontró ninguna solicitud");
     }
     return listarSolicitudCDTBorrador;
-  }
-
-    const listarSolicitudesEnValidacion = async (numUsuario) => {
-
-    const listarSolicitudesEnValidacion = await solicitudCDT.findAll({
-        where: {
-            numUsuario: numUsuario,
-            estado: "enValidacion"
-        }
-    });
-
-    if (!listarSolicitudesEnValidacion || listarSolicitudesEnValidacion.length === 0){
-        throw new Error("No se encontraron ningunas solicitudes pendientes");
-    }
-    return listarSolicitudesEnValidacion;
   }
 
     const listarSolicitudesCDTPendientesAgente = async () => {
@@ -320,4 +290,4 @@ const crearSolicitudEnValidacion = async (solicitud) => {
     return listarSolicitudesCDTPendientesAgente;
   }
 
-export {crearSolicitudEnBorradorCDT, crearSolicitudEnValidacion, actualizarSolicitudCDT, cancelarSolicitudCDT, eliminarSolicitudCDT, listarSolicitudesCDTUsuario, listarSolicitudesCDTBorrador, listarSolicitudCDTBorrador, listarSolicitudesEnValidacion, listarSolicitudesCDTPendientesAgente}
+export {crearSolicitudEnBorradorCDT, crearSolicitudEnValidacion, actualizarSolicitudCDT, cancelarSolicitudCDT, eliminarSolicitudCDT, listarSolicitudesCDTUsuario, listarSolicitudCDTBorrador, listarSolicitudesCDTPendientesAgente}
