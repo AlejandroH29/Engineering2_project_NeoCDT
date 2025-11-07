@@ -20,7 +20,7 @@ export const Register = () => {
     
     const handleSubmit = async (e) => {
         e.preventDefault();
-        if(formData.numeroIdentificacion <= 9999999 && formData.numeroIdentificacion >= 10000000000 ){
+        if(formData.numeroIdentificacion >= 9999999 && formData.numeroIdentificacion <= 10000000000 ){
             setErrorMessage("El número de identificación debe tener entre 7 y 10 digitos.");
             setErrorPopup(true);
             return;
