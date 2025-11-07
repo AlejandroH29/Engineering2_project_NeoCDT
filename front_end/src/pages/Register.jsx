@@ -39,8 +39,9 @@ export const Register = () => {
             alert("Usuario creado con exito")
             navigate("/")
         } catch (err) {
-            err.response.data.error = "Out of range value for column 'numeroIdentificacion' at row 1" ?
-            setErrorMessage("El número de identificación debe tener entre 7 y 10 digitos.") : setErrorMessage(err?.response?.data?.error);
+            // err.response.data.error = "Out of range value for column 'numeroIdentificacion' at row 1" ?
+            // setErrorMessage("El número de identificación debe tener entre 7 y 10 digitos.") : setErrorMessage(err?.response?.data?.error);
+            setErrorMessage(err?.response?.data?.error)
             setErrorPopup(true);
         }
     }
