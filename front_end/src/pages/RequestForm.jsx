@@ -20,6 +20,7 @@ export const RequestForm = () => {
     const navigate = useNavigate();
     const [searchParams] = useSearchParams();
     const requestNumber = searchParams.get("numero")
+    const [completeData, setCompleteData] = useState(false)
 
     useEffect(() => {
         const getDraftData = async () => {
@@ -48,6 +49,10 @@ export const RequestForm = () => {
 
     const handleConfirm = async (e) => {
         e.preventDefault();
+        if (!form.montoInicial && form.montoInicial !== 0) {
+            setCompleteData(true);
+            return;
+        }
         if (!currentUser?.numeroIdentificacion) {
             errorTypeRef.current = "unauth";
             setShowErrorPopup(true);
@@ -122,7 +127,7 @@ export const RequestForm = () => {
                 <label htmlFor="montoInicial">Valor a invertir</label>
                 <input
                     type="text"
-                    placeholder="Ingresa el monto inicial (ej. 1000000)"
+                    placeholder="Ingresa el monto inicial (ej. 1'000,000)"
                     name="montoInicial"
                     value={form.montoInicial}
                     onChange={handleChange}
@@ -164,6 +169,13 @@ export const RequestForm = () => {
                                 navigate("/");
                             }
                         }}
+                        closeText={"Ok"}
+                    />
+                )}
+                {completeData && (
+                    <Popup
+                        text = {"El campo debe estar lleno"}
+                        onClose={()=> setCompleteData(false)}
                         closeText={"Ok"}
                     />
                 )}
