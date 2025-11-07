@@ -24,9 +24,9 @@ export const AppRoutes = () => {
                 <Route path="/" element={<Login/>} />
                 <Route path="/register" element={<Register/>} />
                 <Route path="/create-agent" element={
-                    // <PrivateRoute>
-                    // </PrivateRoute>
+                    <PrivateRoute>
                         <CreateAgent/>
+                    </PrivateRoute>
                 } />
                 <Route path="/request-form" element={
                     <PrivateRoute>
@@ -34,29 +34,30 @@ export const AppRoutes = () => {
                     </PrivateRoute>
                 } />
                 <Route path="/requests-list" element={
-                    // <PrivateRoute>
-                    // </PrivateRoute>
+                    <PrivateRoute>
                         <RequestsList/>
+                    </PrivateRoute>
+                        
                 } />
                 <Route path="/my-requests" element={
-                    // <PrivateRoute>
-                    // </PrivateRoute>
+                    <PrivateRoute>
                         <MyRequests/>
+                    </PrivateRoute>
                 } />
                 <Route path="/admin" element={
-                    // <PrivateRoute>
-                    // </PrivateRoute>
+                    <PrivateRoute>
                         <ViewAdmin/>
+                    </PrivateRoute>
                 } />
                 <Route path="/agent" element={
-                    // <PrivateRoute>
-                    // </PrivateRoute>
+                    <PrivateRoute>
                         <ViewAgent/>
+                    </PrivateRoute>
                 } />
                 <Route path="/client" element={
-                    // <PrivateRoute>
-                    // </PrivateRoute>
+                    <PrivateRoute>
                         <ViewClient/>
+                    </PrivateRoute>
                 } />
             </Routes>
         </>

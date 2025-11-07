@@ -51,7 +51,7 @@ export const Login = () => {
                 <label htmlFor="correo">Correo</label>
                 <input
                 type="email"
-                placeholder='Ingresa tu correo de agente'
+                placeholder='Ingresa tu correo electrónico'
                 name='correo'
                 onChange={handleChange}
                 />
