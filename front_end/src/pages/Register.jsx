@@ -20,6 +20,11 @@ export const Register = () => {
     
     const handleSubmit = async (e) => {
         e.preventDefault();
+        if(formData.numeroIdentificacion <= 9999999 && formData.numeroIdentificacion >= 10000000000 ){
+            setErrorMessage("El número de identificación debe tener entre 7 y 10 digitos.");
+            setErrorPopup(true);
+            return;
+        }
 
         const passwordFormat = /^(?=.*[a-z])(?=.*[A-Z])(?=.*\d)(?=.*[\W_]).{8,}$/;
         if (!passwordFormat.test(formData.contrasena)) {
@@ -33,7 +38,8 @@ export const Register = () => {
             alert("Usuario creado con exito")
             navigate("/")
         } catch (err) {
-            setErrorMessage(err?.response?.data?.error);
+            err.response.data.error = "Out of range value for column 'numeroIdentificacion' at row 1" ?
+            setErrorMessage("El número de identificación debe tener entre 7 y 10 digitos.") : setErrorMessage(err?.response?.data?.error);
             setErrorPopup(true);
         }
     }
