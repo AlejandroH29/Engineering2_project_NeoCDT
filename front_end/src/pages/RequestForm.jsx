@@ -21,6 +21,7 @@ export const RequestForm = () => {
     const [searchParams] = useSearchParams();
     const requestNumber = searchParams.get("numero")
     const [completeData, setCompleteData] = useState(false)
+    const [minimumPrice, setMinimumPrice] = useState(false)
 
     useEffect(() => {
         const getDraftData = async () => {
@@ -48,10 +49,14 @@ export const RequestForm = () => {
     }
 
     const handleConfirm = async (e) => {
-        e.preventDefault();
+        e.preventDefault()
         if (!form.montoInicial && form.montoInicial !== 0) {
-            setCompleteData(true);
-            return;
+            setCompleteData(true)
+            return
+        }
+        if (form.montoInicial < 1000000) {
+            setMinimumPrice(true)
+            return
         }
         if (!currentUser?.numeroIdentificacion) {
             errorTypeRef.current = "unauth";
@@ -177,6 +182,13 @@ export const RequestForm = () => {
                         text = {"El campo debe estar lleno"}
                         onClose={()=> setCompleteData(false)}
                         closeText={"Ok"}
+                    />
+                )}
+                {minimumPrice && (
+                    <Popup
+                        text = {"El monto inicial debe ser mayor a 1'000,000"}
+                        onClose={()=> setMinimumPrice(false)}
+                        closeText={"Ok"}                       
                     />
                 )}
         </div>
