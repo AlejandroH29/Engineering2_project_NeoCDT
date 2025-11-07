@@ -12,7 +12,8 @@ export const Login = () => {
     const navigate = useNavigate();
 
     const [formData, setFormData] = useState({correo: "", contrasena: ""});
-    const [wrongPasswordPopup, setWrongPasswordPopup] = useState(false);
+    const [errorPopup, setErrorPopup] = useState(false);
+    const [errorMessage, setErrorMessage] = useState("");
 
     const handleChange = (e) => {
         const {name, value} = e.target;
@@ -39,7 +40,8 @@ export const Login = () => {
                     break;
             }
         } catch (err) {
-            err?.response?.data?.error === "Contraseña incorrecta" ? setWrongPasswordPopup(true) : console.log(err);
+            setErrorMessage(err?.response?.data?.error);
+            setErrorPopup(true);
         }
     }
 
@@ -70,9 +72,9 @@ export const Login = () => {
                 text = "Iniciar Sesión"
                 />
             </form>
-            {wrongPasswordPopup && <Popup
-            text="Contraseña incorrecta."
-            onClose={() => setWrongPasswordPopup(false)}
+            {errorPopup && <Popup
+            text={errorMessage}
+            onClose={() => setErrorPopup(false)}
             closeText="Ok"
             />}
         </div>

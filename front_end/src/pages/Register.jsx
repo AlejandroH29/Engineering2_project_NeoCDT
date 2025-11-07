@@ -9,6 +9,8 @@ export const Register = () => {
     const navigate = useNavigate();
 
     const [formData, setFormData] = useState({numeroIdentificacion: 0, nombreCompleto: "", tipoIdentificacion: "CC", correo: "", contrasena: "", tipo:"Cliente"})
+    const [errorPopup, setErrorPopup] = useState(false);
+    const [errorMessage, setErrorMessage] = useState("");
 
     const handleChange = (e) => {
         const {name, value} = e.target;
@@ -28,7 +30,8 @@ export const Register = () => {
             alert("Usuario creado con exito")
             navigate("/")
         } catch (err) {
-            console.log(err?.response?.data?.error || "Error al registrar")
+            setErrorMessage(err?.response?.data?.error);
+            setErrorPopup(true);
         }
     }
 
@@ -88,6 +91,11 @@ export const Register = () => {
                     <a onClick={() => navigate("/")}>Login</a>
                 </p>
             </form>
+            {errorPopup && <Popup
+            text={errorMessage}
+            onClose={() => setErrorPopup(false)}
+            closeText="Ok"
+            />}
         </div>
     )
 }
