@@ -2,9 +2,9 @@ import {useContext, useState} from 'react'
 import {useNavigate} from "react-router-dom"
 import { FormButton } from '../components/FormButton';
 import { AuthContext } from '../context/AuthContext';
+import { Popup } from '../components/Popup';
 import axios from 'axios';
 import "../styles/form.css"
-import { Popup } from '../components/Popup';
 
 export const Login = () => {
     const {login} = useContext(AuthContext);
@@ -27,7 +27,6 @@ export const Login = () => {
             const userData = response.data;
             alert("Sesion iniciada");
             login(userData);
-            
             switch (userData.tipo) {
                 case "Agente":
                     navigate("/agent");

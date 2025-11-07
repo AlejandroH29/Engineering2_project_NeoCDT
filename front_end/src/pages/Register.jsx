@@ -2,6 +2,7 @@ import {useState} from 'react'
 import {useNavigate} from "react-router-dom"
 import "../styles/form.css"
 import { FormButton } from '../components/FormButton';
+import { Popup } from '../components/Popup';
 import axios from 'axios';
 
 export const Register = () => {
@@ -19,9 +20,11 @@ export const Register = () => {
     
     const handleSubmit = async (e) => {
         e.preventDefault();
+
         const passwordFormat = /^(?=.*[a-z])(?=.*[A-Z])(?=.*\d)(?=.*[\W_]).{8,}$/;
         if (!passwordFormat.test(formData.contrasena)) {
-            alert("La contraseña no cumple los criterios de seguridad.");
+            setErrorMessage("La contraseña no cumple los criterios de seguridad.");
+            setErrorPopup(true);
             return;
         }
         
