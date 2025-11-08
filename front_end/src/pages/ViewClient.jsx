@@ -16,7 +16,7 @@ export const ViewClient = () => {
                             <td>
                                 <div className="form">
                                     <h3>Solicitar CDT</h3>
-                                    <button type="button" onClick={() => navigate('/request-form')}>Ingresar</button>
+                                    <button data-testid="requestFormButton" type="button" onClick={() => navigate('/request-form')}>Ingresar</button>
                                 </div>
                             </td>
                             <td>
