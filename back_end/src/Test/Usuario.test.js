@@ -19,12 +19,12 @@ describe("Validacion de creacion de usuario", ()=>{
                 correo: "ejemplo@gmail.com",
                 contrasena: "12345",
                 tipo: "Cliente"
-            }
+            };
             Usuario.create.mockResolvedValue(usuario);
             const ejecucion = await crearUsuario(usuario);
             expect(ejecucion).toEqual(usuario);
-        })
-    })
+        });
+    });
     describe("Correo ya en uso",()=>{
         test("Deberia retornar mensaje de error", async ()=>{
             const usuario = {
@@ -34,13 +34,32 @@ describe("Validacion de creacion de usuario", ()=>{
                 correo: "ejemplo@gmail.com",
                 contrasena: "12345",
                 tipo: "Cliente"
-            }
+            };
             Usuario.findOne.mockResolvedValue(usuario);
             const resultado = crearUsuario(usuario);
             await expect(resultado).rejects.toThrow();
-        })
-    })
-})
+        });
+    });
+
+    describe("Identificacion inválida", () => {
+        test("debe lanzar error si numeroIdentificacion no tiene entre 8 y 10 digitos", async () => {
+            const usuarioInvalido = {
+                numeroIdentificacion: 1234567, 
+                nombreCompleto: "Diego",
+                tipoIdentificacion: "CC",
+                correo: "nuevo@mail.com",
+                contrasena: "12345",
+                tipo: "Cliente"
+            };
+
+            Usuario.findOne.mockResolvedValue(null);
+
+            await expect(crearUsuario(usuarioInvalido))
+                .rejects
+                .toThrow("El numero de identificacion debe tener entre 8 y 10 digitos");
+        });
+    });
+});
 
 describe("Validacion inicio de sesion", ()=>{
     describe("Comportamiento normal", ()=>{

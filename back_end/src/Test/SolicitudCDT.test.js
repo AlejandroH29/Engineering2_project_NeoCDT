@@ -37,21 +37,58 @@ describe("SolicitudCDTService - crearSolicitudEnBorradorCDT", () => {
         expect(typeof result.tasaInteres).toBe("number");
         expect(typeof result.montoGanancia).toBe("number");
     });
+
+    it("debe actualizar una solicitud existente cuando se envía numero (ruta de actualización en crearSolicitudEnBorradorCDT)", async () => {
+        // preparar mock de la solicitud existente con métodos update y reload
+        const existing = {
+            numero: 999999,
+            numUsuario: 1234,
+            montoInicial: 50000,
+            tiempo: "3",
+            tasaInteres: 0,
+            montoGanancia: 0,
+            update: jest.fn().mockResolvedValue(true),
+            reload: jest.fn().mockResolvedValue({
+                numero: 999999,
+                numUsuario: 1234,
+                montoInicial: 200000,
+                tiempo: "12",
+                estado: "Borrador",
+                tasaInteres: 0.098,
+                montoGanancia: 219600
+            })
+        };
+        solicitudCDT.findOne.mockResolvedValue(existing);
+
+        const payload = {
+            numero: "999999",
+            numUsuario: "1234",
+            montoInicial: "200000",
+            tiempo: "12"
+        };
+
+        const result = await crearSolicitudEnBorradorCDT(payload);
+
+        // se debe haber buscado la solicitud por el número (Number(payload.numero) en la implementación)
+        expect(solicitudCDT.findOne).toHaveBeenCalledWith({ where: { numero: Number(payload.numero) } });
+
+        // update debe ser llamado con los campos normalizados y calculados
+        expect(existing.update).toHaveBeenCalledWith(expect.objectContaining({
+            montoInicial: 200000,
+            tiempo: "12",
+            tasaInteres: expect.any(Number),
+            montoGanancia: expect.any(Number)
+        }));
+
+        // la función retorna el resultado de reload()
+        expect(result).toEqual(await existing.reload());
+    });
+
 });
 
 describe("SolicitudCDTService - crearSolicitudEnValidacion", () => {
     beforeEach(() => {
         jest.clearAllMocks();
-    });
-
-    it("debe rechazar si el body incluye tiempo vacío", async () => {
-        const payload = {
-            numUsuario: "1234",
-            montoInicial: 100000,
-            tiempo: "" // Aqui con este campo vacio deberia fallar
-        };
-
-        await expect(crearSolicitudEnValidacion(payload)).rejects.toThrow("El tiempo es obligatorio y no puede estar vacío");
     });
 
     it("debe crear nueva solicitud en validación cuando datos válidos y no existe", async () => {
@@ -119,6 +156,119 @@ describe("SolicitudCDTService - crearSolicitudEnValidacion", () => {
 
         await expect(crearSolicitudEnValidacion(payload)).rejects.toThrow("El tiempo es obligatorio y no puede estar vacío");
     });
+
+    it("debe rechazar al actualizar si faltan campos requeridos", async () => {
+        // Simular una solicitud existente con campos incompletos
+        const solicitudExistente = {
+            numero: "777777",
+            numUsuario: "1234",
+            montoInicial: null,  // campo requerido faltante
+            tiempo: "3",
+            estado: "Borrador",
+            save: jest.fn()
+        };
+        solicitudCDT.findOne.mockResolvedValue(solicitudExistente);
+
+        const payload = {
+            numero: "777777",
+            // No enviamos montoInicial ni tiempo
+        };
+
+        await expect(crearSolicitudEnValidacion(payload)).rejects.toThrow("Para enviar a validación ambos campos montoInicial (>0) y tiempo (3,6,9,12) deben estar completos");
+    });
+
+    it("debe rechazar al actualizar si el tiempo no es un valor permitido", async () => {
+        // Simular una solicitud existente
+        const solicitudExistente = {
+            numero: "777777",
+            numUsuario: "1234",
+            montoInicial: 100000,
+            tiempo: "3",
+            estado: "Borrador",
+            save: jest.fn()
+        };
+        solicitudCDT.findOne.mockResolvedValue(solicitudExistente);
+
+        const payload = {
+            numero: "777777",
+            tiempo: "5" // Valor no permitido (debe ser 3,6,9 o 12)
+        };
+
+        await expect(crearSolicitudEnValidacion(payload)).rejects.toThrow("El tiempo debe ser uno de los valores permitidos: 3, 6, 9 o 12");
+    });
+
+    it("debe rechazar al actualizar si el monto inicial no es un valor mayor a cero", async () => {
+        // Simular una solicitud existente
+        const solicitudExistente = {
+            numero: "777777",
+            numUsuario: "1234",
+            montoInicial: 100000,
+            tiempo: "3",
+            estado: "Borrador",
+            save: jest.fn()
+        };
+        solicitudCDT.findOne.mockResolvedValue(solicitudExistente);
+        const payload = {
+            numero: "777777",
+            montoInicial: 0
+        };
+        await expect(crearSolicitudEnValidacion(payload)).rejects.toThrow("El monto inicial debe ser un número mayor a cero");
+    });
+
+    it("debe rechazar si el tiempo no es uno de los valores permitidos al crear nueva solicitud", async () => {
+        solicitudCDT.findOne.mockResolvedValue(null);
+
+        const payload = {
+            numUsuario: "1234",
+            montoInicial: "150000",
+            tiempo: "4" // Valor no permitido (debe ser 3,6,9 o 12)
+        };
+
+        await expect(crearSolicitudEnValidacion(payload)).rejects.toThrow("El tiempo es obligatorio y debe ser uno de los valores: 3, 6, 9 o 12");
+
+        expect(solicitudCDT.create).not.toHaveBeenCalled();
+    });
+
+    it("debe rechazar si el monto inicial es un número menor a cero al crear nueva solicitud", async () => {
+        solicitudCDT.findOne.mockResolvedValue(null);
+
+        const payload = {
+            numUsuario: "1234",
+            montoInicial: "0",
+        };
+
+        await expect(crearSolicitudEnValidacion(payload)).rejects.toThrow("El monto inicial debe ser un número mayor a cero");
+
+        expect(solicitudCDT.create).not.toHaveBeenCalled();
+    });
+
+    it("debe rechazar si el monto inicial es un valor vacio al crear nueva solicitud", async () => {
+        solicitudCDT.findOne.mockResolvedValue(null);
+
+        const payload = {
+            numUsuario: "1234",
+            montoInicial: "",
+        };
+
+        await expect(crearSolicitudEnValidacion(payload)).rejects.toThrow("El monto inicial debe ser un número mayor a cero");
+
+        expect(solicitudCDT.create).not.toHaveBeenCalled();
+    });
+
+    it("debe rechazar si el tiempo NO se envía al crear nueva solicitud", async () => {
+        solicitudCDT.findOne.mockResolvedValue(null);
+
+        const payload = {
+            numUsuario: "1234",
+            montoInicial: "150000"
+        };
+
+        await expect(crearSolicitudEnValidacion(payload)).rejects.toThrow("El tiempo es obligatorio y no puede estar vacío");
+
+        expect(solicitudCDT.create).not.toHaveBeenCalled(); 
+    });
+
+});
 
     describe("SolicitudCDTService - actualizarSolicitudCDT", () => {
         beforeEach(() => {
@@ -333,4 +483,3 @@ describe("SolicitudCDTService - crearSolicitudEnValidacion", () => {
     });
 
     });
-});

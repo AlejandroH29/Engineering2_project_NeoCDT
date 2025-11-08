@@ -168,7 +168,7 @@ const crearSolicitudEnValidacion = async (solicitud) => {
             const valoresPermitidos = ["3", "6", "9", "12"];
             const tiempoStr = String(solicitud.tiempo).trim();
             if (!valoresPermitidos.includes(tiempoStr)) {
-                throw new Error("El tiempo debe ser uno de los valores permitidos: 3, 6, 9 o 12");
+                    throw new Error("El tiempo debe ser uno de los valores permitidos: 3, 6, 9 o 12");
             }
             solicitudBuscada.tiempo = tiempoStr;
             tiempoExist = tiempoStr;
