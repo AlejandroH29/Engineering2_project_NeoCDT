@@ -1,18 +1,17 @@
 import { test, expect } from "@playwright/test";
 
 test("Verifica el contenido del formulario de solicitud", async ({page}) => {
-
     //Inicio de sesion
     await page.goto("http://localhost:5173/");
     const inputCorreo = page.locator('input[name="correo"]');
     await expect(inputCorreo).toBeVisible();
-    await inputCorreo.fill("sepulvedacsamuel09@gmail.com");
-    await expect(inputCorreo).toHaveValue("sepulvedacsamuel09@gmail.com");
+    await inputCorreo.fill("juanpe@gmail.com");
+    await expect(inputCorreo).toHaveValue("juanpe@gmail.com");
 
     const inputContraseña = page.locator('input[name="contrasena"]');
     await expect(inputContraseña).toBeVisible();
-    await inputContraseña.fill("Samupipe23*");
-    await expect(inputContraseña).toHaveValue("Samupipe23*");
+    await inputContraseña.fill("Superjuan10*");
+    await expect(inputContraseña).toHaveValue("Superjuan10*");
     
     const botonInicioSesion = page.getByText("Iniciar Sesión");
     await expect(botonInicioSesion).toBeVisible();
@@ -22,8 +21,8 @@ test("Verifica el contenido del formulario de solicitud", async ({page}) => {
         expect(req.method()).toBe("POST");
         const body = req.postDataJSON();
         expect(body).toMatchObject({
-            "correo": "sepulvedacsamuel09@gmail.com",
-            "contrasena": "Samupipe23*"
+            "correo": "juanpe@gmail.com",
+            "contrasena": "Superjuan10*"
         }) //Espera a que el backend realice el logueo mediante el endpoint
         route.continue();   
     })
