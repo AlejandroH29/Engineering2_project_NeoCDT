@@ -105,3 +105,48 @@ test("Creacion de una solicitud de CDT en validacion",  async ({page}) => {
     await popupButton.click();
     await expect(page).toHaveURL(/my-requests/);
 });
+
+test("Intento de creación con datos incompletos al enviar la solicitud", async ({page}) => {
+    await inicioSesion({page});
+
+    // Navegacion al formulario de solicitud
+    const requestFormButton = page.getByTestId("requestFormButton");
+    expect(requestFormButton).toBeVisible();
+    await requestFormButton.click();
+    await expect(page).toHaveURL(/request-form/);
+
+    // Dejar un campo sin llenar (no rellenamos monto inicial)
+    const amountInput = page.locator("input[name='montoInicial']");
+    expect(amountInput).toBeVisible();
+    // Asegurarse de que está vacío
+    await amountInput.fill("");
+    expect(amountInput).toHaveValue("");
+
+    const timeSelect = page.locator("select[name='tiempo']");
+    expect(timeSelect).toBeVisible();
+    // No seleccionamos ninguna opción explícita aquí para simular que el usuario dejó un campo en blanco
+
+    const inValidationButton = page.getByText("Enviar");
+    expect(inValidationButton).toBeVisible();
+
+    // Interceptamos el endpoint de creación y registramos si se llamó (no arrojamos para permitir continuar la prueba)
+    let createCalled = false;
+    await page.route("**/solicitudes/crearSolicitudEnValidacion", async (route) => {
+        createCalled = true;
+        await route.continue();
+    });
+
+    // Click en Enviar
+    await inValidationButton.click();
+
+    // Esperar un breve momento para ver si se intenta la petición
+    await page.waitForTimeout(500);
+    expect(createCalled).toBe(false);
+
+    // Esperar y verificar el mensaje de validación presente en la UI (usar Locator + expect)
+    const validationMessage = page.locator('text=El campo debe estar lleno');
+    await expect(validationMessage).toBeVisible({ timeout: 50000 });
+
+    // Asegurarse de que aún estamos en el formulario (no hubo navegación)
+    await expect(page).toHaveURL(/request-form/);
+});
