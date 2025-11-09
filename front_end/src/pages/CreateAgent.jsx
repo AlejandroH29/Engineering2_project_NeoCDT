@@ -65,7 +65,7 @@ export const CreateAgent = () => {
                 <label htmlFor="email">Número de documento</label>
                 <input
                 type="text"
-                placeholder='Número de docuemnto del agente'
+                placeholder='Número de documento del agente'
                 name='numId'
                 value={agentData.numId}
                 onChange={handleChange}
