@@ -106,6 +106,50 @@ test("Creacion de una solicitud de CDT en validacion",  async ({page}) => {
     await expect(page).toHaveURL(/my-requests/);
 });
 
+test("Creacion de una solicitud de CDT en borrador",  async ({page}) => {
+    await inicioSesion({page});
+
+    // Navegacion al formulario de solicitud
+    const requestFormButton = page.getByTestId("requestFormButton");
+    expect(requestFormButton).toBeVisible();
+    await requestFormButton.click();
+    await expect(page).toHaveURL(/request-form/);
+
+    // Creacion de solicitud en borrador
+    const amountInput = page.locator("input[name='montoInicial']");
+    expect(amountInput).toBeVisible();
+    await amountInput.fill("2000000");
+    expect(amountInput).toHaveValue("2000000");
+    const timeSelect = page.locator("select[name='tiempo']");
+    expect(timeSelect).toBeVisible();
+    const optionsTime = await timeSelect.locator("option").allTextContents();
+    expect(optionsTime).toEqual(["3 meses", "6 meses", "9 meses", "12 meses"]);
+    await timeSelect.selectOption({value: "9"});
+    const draftButton = page.getByText("Borrador");
+    expect(draftButton).toBeVisible();
+
+    await page.route("**/solicitudes/crearSolicitudEnBorradorCDT", async (route) =>{
+        const req = route.request();
+        expect(req.method()).toBe("POST");
+        const body = req.postDataJSON();
+        expect(body).toMatchObject({
+            "montoInicial": 2000000,
+            "tiempo": "9",
+            "numUsuario": "987654321"
+        });
+        route.continue();   
+    });
+
+    const [responseBorrador, popupButton] = await Promise.all([
+        page.waitForResponse((res) => res.url().includes("/solicitudes/crearSolicitudEnBorradorCDT") && res.status() == 201),
+        page.getByText("Ok"),
+        draftButton.click()
+    ]);
+    expect(popupButton).toBeVisible();
+    await popupButton.click();
+    await expect(page).toHaveURL(/my-requests/);
+});
+
 test("Intento de creación con datos incompletos al enviar la solicitud", async ({page}) => {
     await inicioSesion({page});
 
