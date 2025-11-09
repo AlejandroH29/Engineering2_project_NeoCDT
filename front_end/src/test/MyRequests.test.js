@@ -43,6 +43,13 @@ beforeEach(() => {
   jest.clearAllMocks();
   // Mock global de alert para evitar errores de jsdom
   window.alert = jest.fn();
+  // Silenciar console.error en tests para evitar salida ruidosa cuando se prueban flujos de error
+  jest.spyOn(console, 'error').mockImplementation(() => {})
+});
+
+afterEach(() => {
+  // Restaurar mock de console.error si fue espiado
+  if (console.error.mockRestore) console.error.mockRestore()
 });
 
 // Test: renderiza título y nombre de usuario
