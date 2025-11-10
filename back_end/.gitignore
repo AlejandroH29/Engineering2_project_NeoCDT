@@ -1,3 +1,5 @@
 coverage
 .scannerwork
 node_modules
+#.env file with secrets (do not commit)
+.env
