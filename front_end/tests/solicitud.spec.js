@@ -60,8 +60,9 @@ test("Verifica el contenido del formulario de solicitud", async ({page}) => {
     expect(inValidationButton).toBeVisible();
     const draftButton = page.getByText("Borrador");
     expect(draftButton).toBeVisible();
-    const cancelButton = page.getByText("Cancelar");
-    expect(cancelButton).toBeVisible();
+    // selector más robusto: buscar por role (botón) y nombre, con await
+    const cancelButton = page.getByRole('button', { name: /^Cancelar$/i });
+    await expect(cancelButton).toBeVisible();
 });
 
 test("Creacion de una solicitud de CDT en validacion",  async ({page}) => {
@@ -192,5 +193,49 @@ test("Intento de creación con datos incompletos al enviar la solicitud", async 
     await expect(validationMessage).toBeVisible({ timeout: 50000 });
 
     // Asegurarse de que aún estamos en el formulario (no hubo navegación)
+    await expect(page).toHaveURL(/request-form/);
+});
+
+test("Monto mínimo para creación de solicitud de CDT para enviar", async ({ page }) => {
+    await inicioSesion({ page });
+
+    // ir al formulario
+    const requestFormButton = page.getByTestId("requestFormButton");
+    await expect(requestFormButton).toBeVisible();
+    await requestFormButton.click();
+    await expect(page).toHaveURL(/request-form/);
+
+    // llenar monto menor al mínimo
+    const amountInput = page.locator("input[name='montoInicial']");
+    await expect(amountInput).toBeVisible();
+    await amountInput.fill("500000");
+    await expect(amountInput).toHaveValue("500000");
+
+    // seleccionar tiempo válido (si la validación requiere tiempo seleccionado)
+    const timeSelect = page.locator("select[name='tiempo']");
+    await expect(timeSelect).toBeVisible();
+    await timeSelect.selectOption({ value: "3" });
+
+    // interceptar intento de creación para detectar si se llama al endpoint
+    let createCalled = false;
+    await page.route("**/solicitudes/crearSolicitudEnValidacion", async (route) => {
+        createCalled = true;
+        // devolver respuesta mock (no interesa el resultado, solo detectar llamada)
+        await route.fulfill({ status: 500, body: "blocked" });
+    });
+
+    // intentar enviar
+    const inValidationButton = page.getByText("Enviar");
+    await expect(inValidationButton).toBeVisible();
+    await inValidationButton.click();
+
+    // esperar y comprobar mensaje de validación en UI (ajusta texto si es distinto)
+    const validationMessage = page.locator("text=El monto inicial debe ser mayor a 1'000,000");
+    await expect(validationMessage).toBeVisible({ timeout: 5000 });
+
+    // asegurarse de que no se intentó crear la solicitud
+    expect(createCalled).toBe(false);
+
+    // seguir en el formulario (no navegación)
     await expect(page).toHaveURL(/request-form/);
 });
